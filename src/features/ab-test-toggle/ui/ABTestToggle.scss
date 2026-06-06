@@ -1,0 +1,59 @@
+.ab-test-toggle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid $color-border;
+
+  &__label {
+    font-size: 0.75rem;
+    color: $color-text-soft;
+    display: none;
+
+    @media (min-width: 900px) {
+      display: inline;
+    }
+  }
+
+  &__switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid $color-border;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: background $transition-fast, border-color $transition-fast;
+
+    &--b {
+      background: rgba($color-accent, 0.35);
+      border-color: rgba($color-accent, 0.5);
+    }
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: $color-text;
+    border-radius: 50%;
+    transition: transform $transition-smooth;
+    box-shadow: $shadow-sm;
+
+    .ab-test-toggle__switch--b & {
+      transform: translateX(18px);
+      background: $color-accent;
+    }
+  }
+
+  &__mode {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: $color-text-muted;
+    white-space: nowrap;
+  }
+}

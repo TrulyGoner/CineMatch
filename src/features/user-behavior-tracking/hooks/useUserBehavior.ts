@@ -1,0 +1,22 @@
+import { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { trackEvent, selectBehaviorEvents } from '../model/store';
+import { createTracker } from '../lib/tracker';
+import { useAppDispatch } from '@/app/store';
+import type { UserBehaviorEvent } from '@/entities/analytics/model/types';
+
+export const useUserBehavior = () => {
+  const dispatch = useAppDispatch();
+  const events = useSelector(selectBehaviorEvents);
+
+  const onTrack = useCallback(
+    (event: UserBehaviorEvent) => {
+      dispatch(trackEvent(event));
+    },
+    [dispatch]
+  );
+
+  const tracker = useMemo(() => createTracker(onTrack), [onTrack]);
+
+  return { events, tracker };
+};

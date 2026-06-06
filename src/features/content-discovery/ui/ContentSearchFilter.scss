@@ -1,0 +1,58 @@
+.content-search-filter {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  padding: $spacing-lg;
+  @include glass-surface;
+  border-radius: $radius-lg;
+
+  &__input {
+    width: 100%;
+    padding: $spacing-md $spacing-lg;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid $color-border;
+    border-radius: 99px;
+    color: $color-text;
+    font-size: 0.9375rem;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+
+    &:focus {
+      outline: none;
+      border-color: rgba($color-primary, 0.45);
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+
+    &::placeholder {
+      color: $color-text-soft;
+    }
+  }
+
+  &__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  &__chip {
+    padding: $spacing-xs $spacing-md;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: $color-text-muted;
+    background: transparent;
+    border: 1px solid $color-border;
+    border-radius: 99px;
+    transition: all $transition-fast;
+
+    &:hover {
+      border-color: $color-border-strong;
+      color: $color-text;
+    }
+
+    &--active {
+      background: $color-primary-dim;
+      border-color: rgba($color-primary, 0.35);
+      color: $color-primary;
+    }
+  }
+}

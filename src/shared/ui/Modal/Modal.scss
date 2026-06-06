@@ -1,0 +1,143 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+  background: rgba(5, 4, 3, 0.72);
+  backdrop-filter: blur(8px);
+  animation: overlay-in 0.35s ease;
+
+  &--cinema {
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(16px) saturate(80%);
+    padding: $spacing-md;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  max-height: 92vh;
+  overflow-y: auto;
+  @include card-surface;
+  box-shadow: $shadow-lg;
+  animation: scale-in 0.4s $transition-smooth;
+
+  &--cinema {
+    max-width: 860px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+    animation: modal-cinema-in 0.45s $transition-smooth;
+  }
+
+  &__close {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    @include flex-center;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    transition: background $transition-fast, border-color $transition-fast, transform $transition-fast;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.65);
+      border-color: rgba($color-primary, 0.35);
+      transform: scale(1.05);
+    }
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+
+  &__close-icon {
+    position: relative;
+    width: 14px;
+    height: 14px;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 14px;
+      height: 1.5px;
+      background: $color-text;
+      border-radius: 1px;
+    }
+
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+
+  &__title {
+    padding: $spacing-lg $spacing-lg 0;
+    font-size: 1.25rem;
+    @include heading-display;
+  }
+
+  &__body {
+    padding: $spacing-lg;
+  }
+
+  &--cinema .modal__body {
+    padding: 0;
+  }
+
+  &--cinema .modal__close {
+    top: $spacing-lg;
+    right: $spacing-lg;
+  }
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-cinema-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

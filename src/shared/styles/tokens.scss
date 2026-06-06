@@ -1,0 +1,49 @@
+// Камерная «домашняя кино» палитра — тёплый, не холодный dark UI
+$color-bg: #0a0908;
+$color-bg-soft: #110f0d;
+$color-surface: #161412;
+$color-surface-elevated: #1e1b18;
+$color-surface-glass: rgba(22, 20, 18, 0.82);
+$color-border: rgba(232, 184, 101, 0.1);
+$color-border-strong: rgba(232, 184, 101, 0.22);
+
+$color-text: #f2ece4;
+$color-text-muted: #9c948a;
+$color-text-soft: #6f6860;
+
+$color-primary: #e8b865;
+$color-primary-hover: #f0ca82;
+$color-primary-dim: rgba(232, 184, 101, 0.14);
+
+$color-accent: #d4846a;
+$color-accent-soft: rgba(212, 132, 106, 0.15);
+
+$color-success: #8fbf9a;
+$color-error: #e07a7a;
+$color-warning: #e8b865;
+
+$radius-sm: 8px;
+$radius-md: 14px;
+$radius-lg: 20px;
+$radius-xl: 28px;
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+
+$font-display: 'Fraunces', 'Georgia', serif;
+$font-body: 'Source Sans 3', system-ui, sans-serif;
+
+$shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.35);
+$shadow-md: 0 8px 32px rgba(0, 0, 0, 0.45);
+$shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+$shadow-glow: 0 0 40px rgba(232, 184, 101, 0.08);
+
+$transition-fast: 0.18s ease;
+$transition-smooth: 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+
+$z-modal: 1000;
+$z-navbar: 100;

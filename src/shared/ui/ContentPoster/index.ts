@@ -1,0 +1,1 @@
+export { ContentPoster } from './ContentPoster';

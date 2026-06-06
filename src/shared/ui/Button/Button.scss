@@ -1,0 +1,75 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/mixins' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  font-weight: 600;
+  font-family: $font-body;
+  border-radius: 99px;
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast,
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    padding: $spacing-xs $spacing-md;
+    font-size: 0.8125rem;
+  }
+
+  &--md {
+    padding: $spacing-sm $spacing-lg;
+    font-size: 0.875rem;
+  }
+
+  &--lg {
+    padding: $spacing-md $spacing-xl;
+    font-size: 1rem;
+  }
+
+  &--primary {
+    background: $color-primary;
+    color: #1a1510;
+
+    &:hover:not(:disabled) {
+      background: $color-primary-hover;
+      box-shadow: 0 4px 20px rgba($color-primary, 0.25);
+      transform: translateY(-1px);
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    color: $color-text;
+    border: 1px solid $color-border-strong;
+
+    &:hover:not(:disabled) {
+      border-color: $color-primary;
+      color: $color-primary;
+      background: $color-primary-dim;
+    }
+  }
+
+  &--ghost {
+    color: $color-text-muted;
+    border-radius: $radius-sm;
+
+    &:hover:not(:disabled) {
+      color: $color-text;
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

@@ -1,0 +1,13 @@
+.content-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  &--placeholder {
+    @include flex-center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: $color-text-muted;
+    background: linear-gradient(135deg, $color-surface-elevated, $color-border);
+  }
+}

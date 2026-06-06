@@ -1,0 +1,44 @@
+.content-heatmap {
+  @include card-surface;
+  padding: $spacing-lg;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+  }
+
+  &__empty {
+    color: $color-text-muted;
+    font-size: 0.875rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: $spacing-sm;
+  }
+
+  &__cell {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-xs;
+    padding: $spacing-md $spacing-sm;
+    background: $color-primary;
+    border-radius: $radius-sm;
+    color: #fff;
+    min-height: 72px;
+    transition: opacity 0.2s;
+  }
+
+  &__genre {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__count {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "target": "ES2020",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./out",
+    "baseUrl": ".",
+    "paths": {
+      "@": ["src"],
+      "@app": ["src/app"],
+      "@features": ["src/features"],
+      "@entities": ["src/entities"],
+      "@shared": ["src/shared"],
+      "@types": ["src/shared/types"],
+      "@ui": ["src/shared/ui"],
+      "@ui-button": ["src/shared/ui/Button"],
+      "@ui-spinner": ["src/shared/ui/Spinner"],
+      "@ui-card": ["src/shared/ui/Card"],
+      "@ui-error-boundary": ["src/shared/ui/ErrorBoundary"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js"]
+}

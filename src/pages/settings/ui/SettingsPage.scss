@@ -1,0 +1,44 @@
+.settings-page {
+  animation: fade-up 0.5s ease;
+
+  h1 {
+    @include heading-display;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: $spacing-xl;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-lg;
+  }
+
+  &__card {
+    @include glass-surface;
+    padding: $spacing-lg;
+    border-radius: $radius-lg;
+    transition: border-color $transition-fast;
+
+    &:hover {
+      border-color: $color-border-strong;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+    }
+  }
+
+  &__hint {
+    font-size: 0.875rem;
+    color: $color-text-muted;
+    margin-bottom: $spacing-md;
+    line-height: 1.55;
+  }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

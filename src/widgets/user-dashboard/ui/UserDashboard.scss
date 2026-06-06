@@ -1,0 +1,15 @@
+.user-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: $spacing-lg;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}

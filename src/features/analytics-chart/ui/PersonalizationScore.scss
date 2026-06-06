@@ -1,0 +1,37 @@
+.personalization-score {
+  @include card-surface;
+  padding: $spacing-lg;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+  }
+
+  &__bar {
+    height: 12px;
+    background: $color-surface-elevated;
+    border-radius: $radius-sm;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    background: linear-gradient(90deg, $color-primary, $color-accent);
+    border-radius: $radius-sm;
+    transition: width 0.4s ease;
+  }
+
+  &__value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: $spacing-md;
+    color: $color-primary;
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    color: $color-text-muted;
+    margin-top: $spacing-xs;
+  }
+}

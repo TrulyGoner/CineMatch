@@ -1,0 +1,25 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/mixins' as *;
+
+.card {
+  @include card-surface;
+  overflow: hidden;
+  transition:
+    transform $transition-smooth,
+    box-shadow $transition-smooth,
+    border-color $transition-fast;
+
+  &[role='button'] {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: $color-border-strong;
+      box-shadow: $shadow-md, $shadow-glow;
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+  }
+}

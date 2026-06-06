@@ -1,0 +1,22 @@
+@use '../../styles/tokens' as *;
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  min-height: 200px;
+  padding: $spacing-xl;
+  text-align: center;
+  color: $color-text;
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    color: $color-text-muted;
+    max-width: 400px;
+  }
+}

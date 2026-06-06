@@ -1,0 +1,200 @@
+.content-detail-modal {
+  &__shell {
+    position: relative;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    @include glass-surface;
+    box-shadow: $shadow-lg, $shadow-glow;
+    border: 1px solid $color-border-strong;
+  }
+
+  &__hero {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  &__backdrop-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    transform: scale(1.02);
+  }
+
+  &__backdrop-fallback {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      $color-surface-elevated 0%,
+      #131110 100%
+    );
+  }
+
+  &__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, $color-surface 0%, rgba($color-surface, 0.6) 40%, transparent 100%),
+      linear-gradient(to right, rgba($color-bg, 0.3) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  &__panel {
+    display: grid;
+    grid-template-columns: 148px 1fr;
+    gap: $spacing-xl;
+    padding: 0 $spacing-xl $spacing-xl;
+    margin-top: -72px;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__poster-wrap {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: $radius-md + 4px;
+      background: linear-gradient(145deg, rgba($color-primary, 0.25), transparent 60%);
+      z-index: -1;
+      filter: blur(8px);
+      opacity: 0.6;
+    }
+  }
+
+  &__poster {
+    aspect-ratio: 2 / 3;
+    border-radius: $radius-md;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__labels {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__badge {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+    background: $color-primary-dim;
+    padding: 3px $spacing-sm;
+    border-radius: 99px;
+    border: 1px solid rgba($color-primary, 0.2);
+  }
+
+  &__rating {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $color-success;
+    background: rgba($color-success, 0.1);
+    padding: 3px $spacing-sm;
+    border-radius: 99px;
+  }
+
+  &__title {
+    @include heading-display;
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    margin-bottom: $spacing-xs;
+    color: $color-text;
+  }
+
+  &__meta {
+    font-size: 0.8125rem;
+    color: $color-text-muted;
+    margin-bottom: $spacing-md;
+  }
+
+  &__dot {
+    margin: 0 $spacing-xs;
+    opacity: 0.5;
+  }
+
+  &__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-md;
+  }
+
+  &__genre {
+    font-size: 0.75rem;
+    padding: 4px $spacing-sm;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid $color-border;
+    border-radius: 99px;
+    color: $color-text-muted;
+  }
+
+  &__reasons {
+    margin-bottom: $spacing-md;
+
+    .why-recommended {
+      margin-top: 0;
+    }
+  }
+
+  &__overview {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: rgba($color-text, 0.88);
+    margin-bottom: $spacing-lg;
+    max-width: 52ch;
+  }
+
+  &__metrics {
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-border;
+  }
+
+  &__metrics-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-text-soft;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__metrics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+  }
+
+  &__metric {
+    font-size: 0.8125rem;
+    padding: $spacing-xs $spacing-md;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 99px;
+    color: $color-text-muted;
+    border: 1px solid $color-border;
+  }
+
+  @media (max-width: 580px) {
+    &__panel {
+      grid-template-columns: 1fr;
+      margin-top: -$spacing-xl;
+      padding: 0 $spacing-md $spacing-md;
+      gap: $spacing-md;
+    }
+
+    &__poster-wrap {
+      max-width: 140px;
+    }
+
+    &__hero {
+      height: 160px;
+    }
+  }
+}

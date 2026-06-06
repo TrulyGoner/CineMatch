@@ -1,0 +1,38 @@
+.weights-slider {
+  @include card-surface;
+  padding: $spacing-lg;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-md;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: $color-text-muted;
+
+    strong {
+      color: $color-primary;
+      margin-left: $spacing-xs;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    accent-color: $color-primary;
+  }
+}
