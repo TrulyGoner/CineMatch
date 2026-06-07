@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@/app/store';
 import { ContentCard } from '@/entities/content';
@@ -9,7 +9,6 @@ import { useContentDetail } from '@/features/content-detail';
 import { useUserBehavior } from '@/features/user-behavior-tracking';
 import { computeContentMetrics } from '@/features/user-behavior-tracking/lib/metrics';
 import { selectBehaviorEvents } from '@/features/user-behavior-tracking/model/store';
-import { Button } from '@/shared/ui/Button';
 import { Skeleton } from '@/shared/ui/Skeleton';
 import { Spinner } from '@/shared/ui/Spinner';
 import './ContentGrid.scss';
@@ -19,13 +18,14 @@ interface ContentGridProps {
 }
 
 export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps) => {
-  const { status, error, hasMore, loadMore, retry, prefetchNext } = useContentFeed();
+  const { status, error, hasMore, loadMore, retry } = useContentFeed();
   const { t } = useTranslation();
   const filteredItems = useAppSelector(selectFilteredContent);
   const allItems = useAppSelector(selectAllContent);
   const events = useAppSelector(selectBehaviorEvents);
   const { tracker } = useUserBehavior();
   const { open } = useContentDetail();
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const handleOpen = useCallback(
     (item: Parameters<typeof open>[0]) => {
@@ -50,11 +50,18 @@ export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps)
     return map;
   }, [filteredItems, events]);
 
+  // Infinite scroll: observe sentinel
   useEffect(() => {
-    if (allItems.length > 0) {
-      prefetchNext();
-    }
-  }, [allItems.length, prefetchNext]);
+    if (!hasMore || status === 'loading') return undefined;
+    const el = sentinelRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) loadMore(); },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, status, loadMore]);
 
   if (status === 'loading' && allItems.length === 0) {
     return (
@@ -72,7 +79,9 @@ export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps)
     return (
       <div className="content-grid__error">
         <p>{error ?? t('content.errorLoad')}</p>
-        <Button onClick={retry}>{t('content.retry')}</Button>
+        <button type="button" className="content-grid__retry-btn" onClick={retry}>
+          {t('content.retry')}
+        </button>
       </div>
     );
   }
@@ -100,14 +109,8 @@ export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps)
       )}
 
       {hasMore && (
-        <div className="content-grid__more">
-          <Button
-            variant="secondary"
-            onClick={loadMore}
-            disabled={status === 'loading'}
-          >
-            {status === 'loading' ? <Spinner size="sm" /> : t('content.loadMore')}
-          </Button>
+        <div ref={sentinelRef} className="content-grid__sentinel">
+          {status === 'loading' && <Spinner size="sm" />}
         </div>
       )}
     </div>

@@ -1,3 +1,4 @@
+import i18n from '@/shared/config/i18n';
 import { FRESHNESS_BONUS, FRESHNESS_DAYS_THRESHOLD, RECOMMENDATION_TOP_N, } from '@/shared/config/constants';
 /**
  * Шаг 1: Собираем историю кликов пользователя по жанрам.
@@ -35,8 +36,8 @@ export const calculateRecommendations = (contents, events, weights) => {
             .sort((a, b) => (genreCounts[b] ?? 0) - (genreCounts[a] ?? 0))
             .slice(0, 2);
         const reasons = topGenres.length > 0
-            ? [`На основе вашего интереса к: ${topGenres.join(', ')}`]
-            : ['Популярный контент в каталоге'];
+            ? [`__interest__:${topGenres.join(',')}`]
+            : [i18n.t('whyRecommended.popularContent')];
         return { ...content, score: totalScore, reasons };
     });
     // Step 5: топ 5–10 по убыванию score
@@ -52,6 +53,6 @@ export const shuffleRecommendations = (contents) => {
     return shuffled.slice(0, RECOMMENDATION_TOP_N).map((content) => ({
         ...content,
         score: 0,
-        reasons: ['Случайная подборка (режим B)'],
+        reasons: [i18n.t('whyRecommended.randomMode')],
     }));
 };

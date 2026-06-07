@@ -4,7 +4,8 @@
     "catalog": "Catalog",
     "dashboard": "Dashboard",
     "settings": "Settings",
-    "logoTooltip": "CineMatch — go to home"
+    "logoTooltip": "CineMatch — go to home",
+    "explorer": "Explorer"
   },
   "home": {
     "heroTitle": "Your personal movie shelf",
@@ -31,7 +32,16 @@
     "abTestHint": "Mode A — personalized recommendations. Mode B — random selection.",
     "behaviorData": "Behavior Data",
     "behaviorHint": "Clear click and view history from localStorage.",
-    "clearHistory": "Clear history"
+    "clearHistory": "Clear history",
+    "exportTitle": "Export Data",
+    "exportHint": "Download all your data as a JSON file.",
+    "exportButton": "Export to JSON",
+    "resetTitle": "Reset All Data",
+    "resetHint": "Permanently delete all your data and reset the app.",
+    "resetButton": "Reset Everything",
+    "resetConfirm": "Are you sure? This will delete all your data.",
+    "achievementsTitle": "Achievements",
+    "achievementsHint": "Your achievements and progress tracking."
   },
   "abTest": {
     "label": "A/B Test",
@@ -47,13 +57,19 @@
     "yourHistory": "Your history",
     "click": "click",
     "clickAlt": "",
-    "views": "views"
+    "views": "views",
+    "whereToWatch": "Where to Watch",
+    "streaming": "Stream",
+    "rent": "Rent",
+    "buy": "Buy"
   },
   "whyRecommended": {
     "basedOn": "Based on your interest in:",
     "interestPrefix": "Based on interest in",
     "popularContent": "Popular content in catalog",
-    "randomMode": "Random selection (mode B)"
+    "randomMode": "Random selection (mode B)",
+    "ratingHigh": "Based on your high rating",
+    "disliked": "Noted as not for you"
   },
   "weights": {
     "genre": "Genre",
@@ -84,7 +100,12 @@
     "heatmapTitle": "Genre Heatmap",
     "heatmapEmpty": "No data — click on content",
     "personalizationTitle": "Personalization Score",
-    "personalizationHint": "How well recommendations match your interests"
+    "personalizationHint": "How well recommendations match your interests",
+    "genreDistribution": "Genre Distribution",
+    "accuracyTitle": "Recommendation Accuracy",
+    "accuracyHint": "Based on {{total}} recommendations you liked",
+    "accuracyNoData": "No recommendations yet",
+    "activityTitle": "Recent Activity"
   },
   "recommendation": {
     "pickedForYou": "Picked for you",
@@ -95,8 +116,91 @@
   "contentApi": {
     "untitled": "Untitled"
   },
+  "saved": {
+    "title": "Saved",
+    "empty": "You have no saved content yet",
+    "save": "Save",
+    "unsave": "Remove",
+    "added": "Added to saved",
+    "removed": "Removed from saved"
+  },
+  "similar": {
+    "title": "More Like This",
+    "error": "Failed to load similar content"
+  },
+  "recent": {
+    "title": "Recently Viewed",
+    "empty": "You haven't opened any content cards yet"
+  },
+  "presets": {
+    "title": "Weight Presets",
+    "save": "Save preset",
+    "apply": "Apply",
+    "delete": "Delete",
+    "namePlaceholder": "Preset name",
+    "saveConfirm": "Preset saved",
+    "deleteConfirm": "Preset deleted"
+  },
+  "rating": {
+    "ariaLabel": "Rate this content",
+    "stars": "stars"
+  },
+  "feedback": {
+    "like": "Like this recommendation",
+    "dislike": "Dislike this recommendation",
+    "notInterested": "Not interested"
+  },
+  "explorer": {
+    "title": "Explorer Mode",
+    "description": "Quickly build your taste profile — swipe through content and tell us what you like.",
+    "like": "Like",
+    "dislike": "Dislike",
+    "skip": "Skip",
+    "hint": "After 10 replies, recommendations will adapt to your taste",
+    "loading": "Preparing your cards...",
+    "doneTitle": "Profile built!",
+    "doneText": "Your taste profile is ready. Recommendations will now reflect what you like.",
+    "reset": "Start over"
+  },
   "language": {
     "ru": "Русский",
     "en": "English"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "firstClick": "First Click",
+    "firstClickDesc": "Click on a content card for the first time",
+    "explorer": "Explorer",
+    "explorerDesc": "Rate 10 items in Explorer mode",
+    "collector": "Collector",
+    "collectorDesc": "Save 5 items to your collection",
+    "critic": "Critic",
+    "criticDesc": "Rate 10 items with stars",
+    "viewer": "Viewer",
+    "viewerDesc": "Watch 20 items",
+    "feedbackGiver": "Feedback Giver",
+    "feedbackGiverDesc": "Give feedback on 10 recommendations",
+    "diversity": "Diversity Lover",
+    "diversityDesc": "Interact with content from 5 different genres"
+  },
+  "theme": {
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "toggle": "Toggle theme"
+  },
+  "trailers": {
+    "title": "Trailers & Videos",
+    "noVideos": "No videos available"
+  },
+  "toasts": {
+    "saved": "Added to saved",
+    "unsaved": "Removed from saved",
+    "rated": "Rating saved",
+    "feedbackGiven": "Feedback saved",
+    "dataExported": "Data exported",
+    "dataReset": "All data has been reset",
+    "historyCleared": "History cleared",
+    "presetSaved": "Preset saved",
+    "presetDeleted": "Preset deleted"
   }
 }

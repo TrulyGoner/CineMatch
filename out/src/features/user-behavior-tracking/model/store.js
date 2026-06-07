@@ -25,6 +25,7 @@ const behaviorSlice = createSlice({
             state.events = [];
             state.behaviorHash = computeHash([]);
             localStorageManager.remove(STORAGE_KEYS.behaviorEvents);
+            void indexedDBManager.clearAll();
         },
     },
 });

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import i18n from '@/shared/config/i18n';
 import { Button } from '@/shared/ui/Button';
 import './ErrorBoundary.scss';
 export class ErrorBoundary extends Component {
@@ -20,9 +21,9 @@ export class ErrorBoundary extends Component {
             if (this.props.fallback)
                 return this.props.fallback;
             return (React.createElement("div", { className: "error-boundary" },
-                React.createElement("h2", null, "\u0427\u0442\u043E-\u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A"),
-                React.createElement("p", null, this.state.error?.message ?? 'Неизвестная ошибка'),
-                React.createElement(Button, { onClick: this.handleReset }, "\u041F\u043E\u043F\u0440\u043E\u0431\u043E\u0432\u0430\u0442\u044C \u0441\u043D\u043E\u0432\u0430")));
+                React.createElement("h2", null, i18n.t('errors.somethingWrong')),
+                React.createElement("p", null, this.state.error?.message ?? i18n.t('errors.unknownError')),
+                React.createElement(Button, { onClick: this.handleReset }, i18n.t('errors.retry'))));
         }
         return this.props.children;
     }

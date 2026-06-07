@@ -3,6 +3,8 @@ import type { Recommendation } from '@/entities/recommendation/model/types';
 import { Card } from '@/shared/ui/Card';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { formatDate } from '@/shared/lib/formatters';
+import { StarRating } from '@/features/user-rating';
+import { FeedbackButtons } from '@/features/recommendation-feedback';
 import { WhyRecommended } from './WhyRecommended';
 import './RecommendationCard.scss';
 
@@ -45,6 +47,8 @@ export const RecommendationCard = memo(({ item, onOpen, onView }: Recommendation
     return () => observer.disconnect();
   }, [onView, item.id, primaryGenre]);
 
+  const contentKey = `${item.mediaType}-${item.id}`;
+
   return (
     <Card className="recommendation-card" onClick={handleClick}>
       <div ref={ref} className="recommendation-card__poster">
@@ -60,7 +64,11 @@ export const RecommendationCard = memo(({ item, onOpen, onView }: Recommendation
         <p className="recommendation-card__meta">
           {formatDate(item.releaseDate)} · ★ {item.voteAverage.toFixed(1)}
         </p>
+        <div className="recommendation-card__rating-wrap">
+          <StarRating contentKey={contentKey} size="sm" />
+        </div>
         <WhyRecommended reasons={item.reasons} compact />
+        <FeedbackButtons contentKey={contentKey} />
       </div>
     </Card>
   );

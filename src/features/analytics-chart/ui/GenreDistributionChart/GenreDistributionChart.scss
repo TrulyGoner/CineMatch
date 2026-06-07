@@ -1,0 +1,11 @@
+.genre-distribution-chart {
+  @include card-surface;
+  padding: $spacing-lg;
+
+  &__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+    color: $color-text-muted;
+  }
+}

@@ -11,5 +11,13 @@
     @media (max-width: 900px) {
       grid-template-columns: 1fr;
     }
+
+    &--three {
+      grid-template-columns: 1fr 1fr 1fr;
+
+      @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 }

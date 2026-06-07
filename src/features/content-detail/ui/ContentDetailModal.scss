@@ -152,6 +152,116 @@
     max-width: 52ch;
   }
 
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+
+    .save-btn {
+      position: static;
+      width: auto;
+      height: auto;
+      border-radius: 99px;
+      padding: $spacing-xs $spacing-md;
+      font-size: 0.8125rem;
+      gap: $spacing-xs;
+    }
+  }
+
+  &__similar {
+    margin-top: $spacing-lg;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-border;
+  }
+
+  &__similar-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+    color: $color-text-muted;
+  }
+
+  &__similar-row {
+    display: flex;
+    gap: $spacing-sm;
+    overflow-x: auto;
+    padding-bottom: $spacing-sm;
+    scrollbar-width: thin;
+  }
+
+  &__similar-card {
+    flex-shrink: 0;
+    width: 100px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    .content-poster {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      border-radius: $radius-sm;
+      overflow: hidden;
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  &__similar-name {
+    font-size: 0.6875rem;
+    color: $color-text-muted;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__providers {
+    margin-top: $spacing-lg;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-border;
+  }
+
+  &__providers-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+    color: $color-text-muted;
+  }
+
+  &__provider-group {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__provider-label {
+    font-size: 0.75rem;
+    color: $color-text-soft;
+    min-width: 5ch;
+  }
+
+  &__provider-icons {
+    display: flex;
+    gap: $spacing-xs;
+  }
+
+  &__provider-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-sm;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px;
+  }
+
   &__metrics {
     padding-top: $spacing-md;
     border-top: 1px solid $color-border;

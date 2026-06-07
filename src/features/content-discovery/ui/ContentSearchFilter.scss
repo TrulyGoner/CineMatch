@@ -7,6 +7,10 @@
   @include glass-surface;
   border-radius: $radius-lg;
 
+  &__input-wrap {
+    position: relative;
+  }
+
   &__input {
     width: 100%;
     padding: $spacing-md $spacing-lg;
@@ -26,6 +30,55 @@
     &::placeholder {
       color: $color-text-soft;
     }
+  }
+
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    list-style: none;
+    margin: 0;
+    padding: $spacing-xs 0;
+    background: $color-surface-elevated;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-lg;
+    z-index: 10;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  &__suggestion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background: transparent;
+    border: none;
+    color: $color-text;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background $transition-fast;
+
+    &:hover,
+    &--focused {
+      background: $color-primary-dim;
+    }
+  }
+
+  &__suggestion-title {
+    @include truncate;
+    flex: 1;
+  }
+
+  &__suggestion-type {
+    font-size: 0.6875rem;
+    color: $color-text-soft;
+    margin-left: $spacing-sm;
+    flex-shrink: 0;
   }
 
   &__genres {

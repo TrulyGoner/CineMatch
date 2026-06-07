@@ -1,0 +1,37 @@
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  &--md { gap: 4px; }
+
+  &__star {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $color-border-strong;
+    font-size: 1rem;
+    line-height: 1;
+    transition: color $transition-fast, transform $transition-fast;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      color: $color-primary;
+      transform: scale(1.2);
+    }
+
+    &:disabled { cursor: default; }
+
+    &--filled {
+      color: $color-primary;
+    }
+  }
+
+  &--md &__star { font-size: 1.25rem; }
+
+  &__value {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+    margin-left: 4px;
+  }
+}

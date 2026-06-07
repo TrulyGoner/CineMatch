@@ -1,3 +1,4 @@
 export { useContentFeed } from './hooks/useContentFeed';
-export { getPosterUrl } from './api/contentApi';
-export { selectAllContent } from './model/store';
+export { fetchMovies, getPosterUrl, getContentKey } from './api/contentApi';
+export { ContentSearchFilter } from './ui/ContentSearchFilter';
+export { selectAllContent, selectFilteredContent, selectContentStatus, selectContentError, selectHasMoreContent, selectSearchQuery, selectSelectedGenre, } from './model/store';

@@ -6,6 +6,8 @@ import { Navbar } from '@/widgets/navbar';
 import { HomePage } from '@/pages/home/ui/HomePage';
 import { ContentPage } from '@/pages/content/ui/ContentPage';
 import { SettingsPage } from '@/pages/settings/ui/SettingsPage';
+import { SavedPage } from '@/pages/saved/ui/SavedPage';
+import ExplorerPage from '@/pages/explorer/ui/ExplorerPage';
 
 const DashboardPage = lazy(() => import('@/pages/dashboard/ui/DashboardPage'));
 
@@ -24,11 +26,13 @@ export const RouterProvider = () => (
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/content" element={<ContentPage />} />
+            <Route path="/saved" element={<SavedPage />} />
             <Route
               path="/dashboard"
               element={<DashboardPage />}
             />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/explorer" element={<ExplorerPage />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

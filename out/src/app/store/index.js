@@ -5,6 +5,9 @@ import behavior from '@/features/user-behavior-tracking/model/store';
 import weights from '@/features/recommendation-weights/model/store';
 import abTest from '@/features/ab-test-toggle/model/store';
 import content from '@/features/content-discovery/model/store';
+import contentDetail from '@/features/content-detail/model/store';
+import language from '@/features/language/model/store';
+import savedContent from '@/features/saved-content/model/store';
 export const store = configureStore({
     reducer: {
         recommendations: recommendation.reducer,
@@ -12,6 +15,9 @@ export const store = configureStore({
         weights: weights.reducer,
         abTest: abTest.reducer,
         content: content.reducer,
+        contentDetail: contentDetail.reducer,
+        language: language.reducer,
+        savedContent: savedContent.reducer,
     },
 });
 export const useAppDispatch = useDispatch;

@@ -2,6 +2,8 @@ import { memo, useCallback, useEffect, useRef } from 'react';
 import type { Content, ContentMetrics } from '@/entities/content/model/types';
 import { Card } from '@/shared/ui/Card';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
+import { SaveButton } from '@/features/saved-content';
+import { StarRating } from '@/features/user-rating';
 import { formatDate, formatDuration } from '@/shared/lib/formatters';
 import './ContentCard.scss';
 
@@ -55,6 +57,7 @@ export const ContentCard = memo(({ item, metrics, onOpen, onView }: ContentCardP
           posterPath={item.posterPath}
           backdropPath={item.backdropPath}
         />
+        <SaveButton item={item} />
       </div>
       <div className="content-card__body">
         <h3 className="content-card__title">{item.title}</h3>
@@ -70,11 +73,14 @@ export const ContentCard = memo(({ item, metrics, onOpen, onView }: ContentCardP
             ))}
           </div>
         )}
+        <div className="content-card__footer">
+          <StarRating contentKey={`${item.mediaType}-${item.id}`} size="sm" />
+        </div>
         {hasMetrics && metrics && (
           <div className="content-card__metrics">
-            {metrics.clickCount > 0 && <span>{metrics.clickCount} клик.</span>}
+            {metrics.clickCount > 0 && <span>{metrics.clickCount} {metrics.clickCount === 1 ? 'click' : 'clicks'}</span>}
             {metrics.viewDuration > 0 && (
-              <span>{formatDuration(metrics.viewDuration)} просмотр</span>
+              <span>{formatDuration(metrics.viewDuration)} viewed</span>
             )}
           </div>
         )}

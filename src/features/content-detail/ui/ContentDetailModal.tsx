@@ -1,32 +1,91 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/shared/config/i18n';
-import { useAppSelector } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/store';
 import { selectBehaviorEvents } from '@/features/user-behavior-tracking/model/store';
 import { computeContentMetrics } from '@/features/user-behavior-tracking/lib/metrics';
 import { WhyRecommended } from '@/features/recommendation-engine/ui/WhyRecommended';
+import { SaveButton } from '@/features/saved-content';
+import { StarRating } from '@/features/user-rating';
+import { FeedbackButtons } from '@/features/recommendation-feedback';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { buildTmdbImageUrl } from '@/shared/lib/tmdbImages';
 import { formatDate, formatDuration } from '@/shared/lib/formatters';
 import { Modal } from '@/shared/ui/Modal';
 import { useContentDetail } from '../hooks/useContentDetail';
+import { fetchSimilar, fetchWatchProviders } from '@/features/content-discovery/api/contentApi';
+import type { WatchProvider } from '@/features/content-discovery/api/contentApi';
+import type { Content } from '@/entities/content/model/types';
+import { openDetail } from '@/features/content-detail/model/store';
 import './ContentDetailModal.scss';
+
+const RECENT_KEY = 'recent_views';
+
+const addRecentView = (item: Content): void => {
+  try {
+    const raw = localStorage.getItem(RECENT_KEY);
+    let list: { id: number; mediaType: string; timestamp: number }[] = raw ? JSON.parse(raw) : [];
+    list = list.filter((v) => !(v.id === item.id && v.mediaType === item.mediaType));
+    list.unshift({ id: item.id, mediaType: item.mediaType, timestamp: Date.now() });
+    if (list.length > 20) list = list.slice(0, 20);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+  } catch {
+    // ignore
+  }
+};
 
 export const ContentDetailModal = () => {
   const { item, reasons, isOpen, close } = useContentDetail();
+  const dispatch = useAppDispatch();
   const events = useAppSelector(selectBehaviorEvents);
   const { t } = useTranslation();
+  const [similar, setSimilar] = useState<Content[]>([]);
+  const [providers, setProviders] = useState<{
+    flatrate: WatchProvider[];
+    rent: WatchProvider[];
+    buy: WatchProvider[];
+  }>({ flatrate: [], rent: [], buy: [] });
 
   const metrics = useMemo(
     () => (item ? computeContentMetrics(item.id, events) : null),
     [item, events]
   );
 
+  useEffect(() => {
+    if (item && isOpen) {
+      addRecentView(item);
+    }
+  }, [item, isOpen]);
+
+  useEffect(() => {
+    if (!item || !isOpen) return;
+    let cancelled = false;
+    fetchSimilar(item.id, item.mediaType)
+      .then((res) => { if (!cancelled) setSimilar(res); })
+      .catch(() => { if (!cancelled) setSimilar([]); });
+    return () => { cancelled = true; setSimilar([]); };
+  }, [item, isOpen]);
+
+  useEffect(() => {
+    if (!item || !isOpen) return;
+    let cancelled = false;
+    fetchWatchProviders(item.id, item.mediaType)
+      .then((res) => { if (!cancelled) setProviders(res); })
+      .catch(() => { if (!cancelled) setProviders({ flatrate: [], rent: [], buy: [] }); });
+    return () => { cancelled = true; setProviders({ flatrate: [], rent: [], buy: [] }); };
+  }, [item, isOpen]);
+
+  const handleSimilarOpen = useCallback((simItem: Content) => {
+    dispatch(openDetail({ item: simItem, reasons: [] }));
+  }, [dispatch]);
+
   if (!item) return null;
 
   const backdropUrl = buildTmdbImageUrl(item.backdropPath, 'w780');
   const mediaLabel = item.mediaType === 'tv' ? t('detail.series') : t('detail.movie');
   const hasEngagement = metrics && (metrics.clickCount > 0 || metrics.viewDuration > 0);
+  const contentKey = `${item.mediaType}-${item.id}`;
+  const hasProviders = providers.flatrate.length > 0 || providers.rent.length > 0 || providers.buy.length > 0;
 
   return (
     <Modal isOpen={isOpen} onClose={close} variant="cinema" className="content-detail-modal">
@@ -65,6 +124,12 @@ export const ContentDetailModal = () => {
             </div>
 
             <h2 className="content-detail-modal__title">{item.title}</h2>
+
+            <div className="content-detail-modal__actions">
+              <SaveButton item={item} />
+              <StarRating contentKey={contentKey} size="md" interactive />
+              <FeedbackButtons contentKey={contentKey} />
+            </div>
 
             <p className="content-detail-modal__meta">
               {formatDate(item.releaseDate)}
@@ -106,6 +171,95 @@ export const ContentDetailModal = () => {
                       {formatDuration(metrics.viewDuration)} {t('detail.views')}
                     </span>
                   )}
+                </div>
+              </div>
+            )}
+
+            {hasProviders && (
+              <div className="content-detail-modal__providers">
+                <h4 className="content-detail-modal__providers-title">{t('detail.whereToWatch')}</h4>
+                {providers.flatrate.length > 0 && (
+                  <div className="content-detail-modal__provider-group">
+                    <span className="content-detail-modal__provider-label">{t('detail.streaming')}</span>
+                    <div className="content-detail-modal__provider-icons">
+                      {providers.flatrate.map((p) => {
+                        const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
+                        return imgUrl ? (
+                          <img
+                            key={p.provider_id}
+                            src={imgUrl}
+                            alt={p.provider_name}
+                            title={p.provider_name}
+                            className="content-detail-modal__provider-icon"
+                            loading="lazy"
+                          />
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                )}
+                {providers.rent.length > 0 && (
+                  <div className="content-detail-modal__provider-group">
+                    <span className="content-detail-modal__provider-label">{t('detail.rent')}</span>
+                    <div className="content-detail-modal__provider-icons">
+                      {providers.rent.map((p) => {
+                        const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
+                        return imgUrl ? (
+                          <img
+                            key={p.provider_id}
+                            src={imgUrl}
+                            alt={p.provider_name}
+                            title={p.provider_name}
+                            className="content-detail-modal__provider-icon"
+                            loading="lazy"
+                          />
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                )}
+                {providers.buy.length > 0 && (
+                  <div className="content-detail-modal__provider-group">
+                    <span className="content-detail-modal__provider-label">{t('detail.buy')}</span>
+                    <div className="content-detail-modal__provider-icons">
+                      {providers.buy.map((p) => {
+                        const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
+                        return imgUrl ? (
+                          <img
+                            key={p.provider_id}
+                            src={imgUrl}
+                            alt={p.provider_name}
+                            title={p.provider_name}
+                            className="content-detail-modal__provider-icon"
+                            loading="lazy"
+                          />
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {similar.length > 0 && (
+              <div className="content-detail-modal__similar">
+                <h4 className="content-detail-modal__similar-title">{t('similar.title')}</h4>
+                <div className="content-detail-modal__similar-row">
+                  {similar.map((sim) => (
+                    <button
+                      key={`${sim.mediaType}-${sim.id}`}
+                      type="button"
+                      className="content-detail-modal__similar-card"
+                      onClick={() => handleSimilarOpen(sim)}
+                    >
+                      <ContentPoster
+                        title={sim.title}
+                        posterPath={sim.posterPath}
+                        backdropPath={sim.backdropPath}
+                      />
+                      <span className="content-detail-modal__similar-name">{sim.title}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             )}

@@ -6,6 +6,14 @@ export const STORAGE_KEYS = {
   weights: 'recommendation_weights',
   abTestMode: 'ab_test_mode',
   locale: 'app_locale',
+  savedContent: 'saved_content',
+  presets: 'weight_presets',
+  recentViews: 'recent_views',
+  userRatings: 'user_ratings',
+  userFeedback: 'user_feedback',
+  explorer: 'explorer_profile',
+  theme: 'app_theme',
+  achievements: 'achievements',
 } as const;
 
 export const RECOMMENDATION_INTERVAL_MS = 30_000;

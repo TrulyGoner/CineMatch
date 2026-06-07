@@ -1,8 +1,9 @@
-import { useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getContentKey } from '@/features/content-discovery/api/contentApi';
 import { RecommendationCard } from '@/features/recommendation-engine';
 import { useRecommendations } from '@/features/recommendation-engine/hooks/useRecommendations';
+import { groupByGenre } from '@/features/recommendation-engine/lib/scoringAlgorithm';
 import { useContentDetail } from '@/features/content-detail';
 import { useUserBehavior } from '@/features/user-behavior-tracking';
 import { Button } from '@/shared/ui/Button';
@@ -15,6 +16,11 @@ export const RecommendationFeed = () => {
   const { tracker } = useUserBehavior();
   const { open } = useContentDetail();
   const { t } = useTranslation();
+
+  const rows = useMemo(() => {
+    if (items.length === 0) return [];
+    return Object.entries(groupByGenre(items));
+  }, [items]);
 
   const handleOpen = useCallback(
     (item: (typeof items)[number]) => {
@@ -62,21 +68,26 @@ export const RecommendationFeed = () => {
         <h2 className="recommendation-feed__title">{t('recommendation.pickedForYou')}</h2>
         {status === 'loading' && <Spinner size="sm" />}
       </div>
-      <div className="recommendation-feed__grid">
-        {items.map((item) => (
-          <RecommendationCard
-            key={getContentKey(item)}
-            item={item}
-            onOpen={handleOpen}
-            onView={handleView}
-          />
-        ))}
-      </div>
-      {items.length === 0 && status !== 'loading' && (
+      {rows.length === 0 && status !== 'loading' && (
         <p className="recommendation-feed__empty">
           {t('recommendation.emptyState')}
         </p>
       )}
+      {rows.map(([genre, recs]) => (
+        <section key={genre} className="recommendation-feed__row-section">
+          <h3 className="recommendation-feed__row-title">{genre}</h3>
+          <div className="recommendation-feed__row">
+            {recs.map((item) => (
+              <RecommendationCard
+                key={getContentKey(item)}
+                item={item}
+                onOpen={handleOpen}
+                onView={handleView}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 };

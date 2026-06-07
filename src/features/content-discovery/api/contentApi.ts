@@ -106,4 +106,86 @@ export const fetchMovies = async (
 
 export const getContentKey = (item: Content): string => `${item.mediaType}-${item.id}`;
 
+export const fetchSimilar = async (
+  contentId: number,
+  mediaType: 'movie' | 'tv',
+  signal?: AbortSignal
+): Promise<Content[]> => {
+  assertApiKey();
+  const endpoint = `/${mediaType}/${contentId}/similar`;
+  const lang = tmdbLocale();
+  const cacheKey = `similar_${lang}_${mediaType}_${contentId}`;
+
+  try {
+    const data = await fetchWithCache<TmdbResponse>(
+      cacheKey,
+      async (abortSignal) => {
+        const response = await apiClient.get<TmdbResponse>(endpoint, {
+          params: { language: lang },
+          signal: abortSignal,
+        });
+        return response.data;
+      },
+      signal ?? new AbortController().signal
+    );
+    return data.results.map((item) => mapTmdbToContent(item, mediaType));
+  } catch {
+    return [];
+  }
+};
+
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+  display_priority: number;
+}
+
+interface TmdbProviderResponse {
+  results: Record<string, {
+    flatrate?: WatchProvider[];
+    rent?: WatchProvider[];
+    buy?: WatchProvider[];
+    link?: string;
+  }>;
+}
+
+export const fetchWatchProviders = async (
+  contentId: number,
+  mediaType: 'movie' | 'tv',
+  signal?: AbortSignal
+): Promise<{
+  flatrate: WatchProvider[];
+  rent: WatchProvider[];
+  buy: WatchProvider[];
+}> => {
+  assertApiKey();
+  const endpoint = `/${mediaType}/${contentId}/watch/providers`;
+  const lang = tmdbLocale();
+  const cacheKey = `providers_${lang}_${mediaType}_${contentId}`;
+
+  try {
+    const data = await fetchWithCache<TmdbProviderResponse>(
+      cacheKey,
+      async (abortSignal) => {
+        const response = await apiClient.get<TmdbProviderResponse>(endpoint, {
+          params: { language: lang },
+          signal: abortSignal,
+        });
+        return response.data;
+      },
+      signal ?? new AbortController().signal
+    );
+    const regionCode = lang === 'ru-RU' ? 'RU' : 'US';
+    const region = data.results[regionCode] ?? data.results.US ?? data.results.RU ?? {};
+    return {
+      flatrate: region.flatrate ?? [],
+      rent: region.rent ?? [],
+      buy: region.buy ?? [],
+    };
+  } catch {
+    return { flatrate: [], rent: [], buy: [] };
+  }
+};
+
 export { getContentPosterUrl, getPosterUrl, buildTmdbImageUrl } from '@/shared/lib/tmdbImages';

@@ -3,26 +3,32 @@
     "strict": true,
     "noImplicitAny": true,
     "module": "ESNext",
-    "target": "ES2020",
-    "jsx": "react",
+    "target": "ES2022",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "./out",
+    "noEmit": true,
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
     "paths": {
+      "@/*": ["src/*"],
       "@": ["src"],
-      "@app": ["src/app"],
-      "@features": ["src/features"],
-      "@entities": ["src/entities"],
-      "@shared": ["src/shared"],
-      "@types": ["src/shared/types"],
-      "@ui": ["src/shared/ui"],
-      "@ui-button": ["src/shared/ui/Button"],
-      "@ui-spinner": ["src/shared/ui/Spinner"],
-      "@ui-card": ["src/shared/ui/Card"],
-      "@ui-error-boundary": ["src/shared/ui/ErrorBoundary"]
-    }
+      "@app/*": ["src/app/*"],
+      "@features/*": ["src/features/*"],
+      "@entities/*": ["src/entities/*"],
+      "@shared/*": ["src/shared/*"],
+      "@widgets/*": ["src/widgets/*"],
+      "@pages/*": ["src/pages/*"]
+    },
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js"]
+  "include": ["src"]
 }
