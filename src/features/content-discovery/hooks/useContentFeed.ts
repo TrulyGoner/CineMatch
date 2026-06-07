@@ -1,18 +1,21 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import i18n from '@/shared/config/i18n';
 import { AbortError } from '@/shared/api/apiClient';
-import { useAppDispatch } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/store';
 import { fetchMovies } from '../api/contentApi';
 import {
   appendContent,
   setError,
   setLoading,
+  resetContent,
   selectAllContent,
   selectContentPage,
   selectContentStatus,
   selectContentError,
   selectHasMoreContent,
 } from '../model/store';
+import { selectLocale } from '@/features/language/model/store';
 
 export const useContentFeed = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +24,9 @@ export const useContentFeed = () => {
   const status = useSelector(selectContentStatus);
   const error = useSelector(selectContentError);
   const hasMore = useSelector(selectHasMoreContent);
+  const locale = useAppSelector(selectLocale);
   const abortRef = useRef<AbortController | null>(null);
+  const prevLocaleRef = useRef(locale);
 
   const loadPage = useCallback(
     async (nextPage: number) => {
@@ -42,12 +47,20 @@ export const useContentFeed = () => {
         );
       } catch (err) {
         if (err instanceof AbortError) return;
-        const message = err instanceof Error ? err.message : 'Ошибка загрузки';
+        const message = err instanceof Error ? err.message : i18n.t('errors.loadingError');
         dispatch(setError(message));
       }
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    if (prevLocaleRef.current !== locale) {
+      prevLocaleRef.current = locale;
+      abortRef.current?.abort();
+      dispatch(resetContent());
+    }
+  }, [locale, dispatch]);
 
   const loadMore = useCallback(() => {
     if (status === 'loading' || !hasMore) return;

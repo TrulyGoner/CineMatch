@@ -1,0 +1,31 @@
+@use '@/shared/styles/tokens' as *;
+
+.save-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    transform: scale(1.1);
+  }
+
+  &--active {
+    color: #e84a5f;
+    background: rgba(0, 0, 0, 0.6);
+  }
+}

@@ -21,7 +21,7 @@ export const useRecommendations = () => {
         behaviorHash,
         weights,
         abMode,
-        catalogIds: catalog.map((c) => c.id).join(','),
+        catalogIds: catalog.map((c) => `${c.mediaType}-${c.id}`).join(','),
     }), [behaviorHash, weights, abMode, catalog]);
     const recalculate = useCallback(() => {
         if (catalog.length === 0)

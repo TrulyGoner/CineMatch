@@ -1,13 +1,16 @@
+import i18n from '@/shared/config/i18n';
 import { localStorageManager } from '@/shared/storage/localStorageManager';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 export const getApiErrorMessage = (error) => {
     const status = error.response?.status;
     if (status === 401)
-        return 'Неверный API-ключ TMDB. Проверьте .env';
+        return i18n.t('errors.invalidKey');
+    if (status === 502)
+        return i18n.t('errors.tmdbUnavailable');
     if (status === 429)
-        return 'Превышен лимит запросов. Попробуйте позже';
+        return i18n.t('errors.rateLimit');
     if (status && status >= 500)
-        return 'Ошибка сервера TMDB. Повторите запрос';
-    return error.message || 'Не удалось загрузить данные';
+        return i18n.t('errors.serverError');
+    return error.message || i18n.t('errors.loadFailed');
 };
 export const getCachedFallback = () => localStorageManager.get(STORAGE_KEYS.contentFallback);

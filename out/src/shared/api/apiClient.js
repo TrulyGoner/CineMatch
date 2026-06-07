@@ -1,8 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import i18n from '@/shared/config/i18n';
 import { env } from '@/shared/config/env';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 import { localStorageManager } from '@/shared/storage/localStorageManager';
 import { getApiErrorMessage } from './interceptors';
+import { isBearerToken } from './tmdbAuth';
 export class AbortError extends Error {
     constructor() {
         super('Request aborted');
@@ -11,8 +13,19 @@ export class AbortError extends Error {
 }
 export const apiClient = axios.create({
     baseURL: env.tmdbApiBase,
-    params: { api_key: env.tmdbApiKey ?? '' },
-    timeout: 10000,
+    timeout: 15000,
+});
+apiClient.interceptors.request.use((config) => {
+    const token = env.tmdbApiKey?.trim();
+    if (!token)
+        return config;
+    if (isBearerToken(token)) {
+        config.headers.set('Authorization', `Bearer ${token}`);
+    }
+    else {
+        config.params = { ...config.params, api_key: token };
+    }
+    return config;
 });
 export const fetchWithAbort = async (url, signal) => {
     try {
@@ -44,7 +57,7 @@ export const fetchWithCache = async (key, fetcher, signal) => {
         const fallback = localStorageManager.get(STORAGE_KEYS.contentFallback);
         if (fallback)
             return fallback;
-        const message = error instanceof AxiosError ? getApiErrorMessage(error) : 'Ошибка загрузки';
-        throw new Error(message);
+        const message = error instanceof AxiosError ? getApiErrorMessage(error) : i18n.t('errors.loadingError');
+        throw new Error(message, { cause: error });
     }
 };

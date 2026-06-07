@@ -31,4 +31,27 @@
   &__error-inline {
     color: $color-error;
   }
+
+  &__retry-btn {
+    margin-top: $spacing-md;
+    padding: $spacing-sm $spacing-xl;
+    background: $color-primary-dim;
+    border: 1px solid $color-border-strong;
+    border-radius: 99px;
+    color: $color-primary;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: rgba($color-primary, 0.2);
+    }
+  }
+
+  &__sentinel {
+    display: flex;
+    justify-content: center;
+    padding: $spacing-lg;
+    min-height: 48px;
+  }
 }

@@ -53,4 +53,23 @@
     background: rgba($color-error, 0.06);
     border: 1px solid rgba($color-error, 0.15);
   }
+
+  &__row-section {
+    margin-bottom: $spacing-xl;
+  }
+
+  &__row-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-text;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-xs;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: $spacing-md;
+  }
 }

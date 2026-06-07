@@ -40,7 +40,7 @@
     background: transparent;
     border: none;
     box-shadow: none;
-    overflow: visible;
+    overflow-y: auto;
     animation: modal-cinema-in 0.45s $transition-smooth;
   }
 

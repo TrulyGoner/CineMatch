@@ -1,0 +1,1 @@
+export { GenreDistributionChart } from './GenreDistributionChart';

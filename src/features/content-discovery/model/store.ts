@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createSelector, type PayloadAction } from '@reduxjs/toolkit';
 import type { Content } from '@/entities/content/model/types';
 
 interface ContentState {
@@ -77,22 +77,27 @@ export default contentSlice;
 export const selectAllContent = (state: { content: ContentState }): Content[] =>
   state.content.items;
 
-export const selectFilteredContent = (state: { content: ContentState }): Content[] => {
-  const { items, searchQuery, selectedGenre } = state.content;
-  const query = searchQuery.trim().toLowerCase();
+const selectContentState = (state: { content: ContentState }): ContentState => state.content;
 
-  return items.filter((item) => {
-    const matchesGenre =
-      !selectedGenre || item.genres.some((g) => g.toLowerCase() === selectedGenre.toLowerCase());
+export const selectFilteredContent = createSelector(
+  selectContentState,
+  (content) => {
+    const { items, searchQuery, selectedGenre } = content;
+    const query = searchQuery.trim().toLowerCase();
 
-    const matchesSearch =
-      !query ||
-      item.title.toLowerCase().includes(query) ||
-      item.overview.toLowerCase().includes(query);
+    return items.filter((item) => {
+      const matchesGenre =
+        !selectedGenre || item.genres.some((g) => g.toLowerCase() === selectedGenre.toLowerCase());
 
-    return matchesGenre && matchesSearch;
-  });
-};
+      const matchesSearch =
+        !query ||
+        item.title.toLowerCase().includes(query) ||
+        item.overview.toLowerCase().includes(query);
+
+      return matchesGenre && matchesSearch;
+    });
+  }
+);
 
 export const selectContentStatus = (state: { content: ContentState }): ContentState['status'] =>
   state.content.status;

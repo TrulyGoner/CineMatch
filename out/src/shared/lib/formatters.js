@@ -1,6 +1,8 @@
+import i18n from '@/shared/config/i18n';
 export const formatDate = (iso) => {
     const date = new Date(iso);
-    return date.toLocaleDateString('ru-RU', {
+    const locale = i18n.language === 'ru' ? 'ru-RU' : 'en-US';
+    return date.toLocaleDateString(locale, {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
@@ -10,7 +12,10 @@ export const formatPercent = (value) => `${Math.round(Math.min(100, Math.max(0, 
 export const formatDuration = (ms) => {
     const seconds = Math.floor(ms / 1000);
     if (seconds < 60)
-        return `${seconds}с`;
+        return `${seconds}${i18n.language === 'ru' ? 'с' : 's'}`;
     const minutes = Math.floor(seconds / 60);
-    return `${minutes}м ${seconds % 60}с`;
+    const secs = seconds % 60;
+    if (i18n.language === 'ru')
+        return `${minutes}м ${secs}с`;
+    return `${minutes}m ${secs}s`;
 };

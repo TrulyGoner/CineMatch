@@ -1,4 +1,5 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import i18n from '@/shared/config/i18n';
 import { env } from '@/shared/config/env';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 import { localStorageManager } from '@/shared/storage/localStorageManager';
@@ -67,7 +68,7 @@ export const fetchWithCache = async <T>(
     if (fallback) return fallback;
 
     const message =
-      error instanceof AxiosError ? getApiErrorMessage(error) : 'Ошибка загрузки';
-    throw new Error(message);
+      error instanceof AxiosError ? getApiErrorMessage(error) : i18n.t('errors.loadingError');
+    throw new Error(message, { cause: error });
   }
 };

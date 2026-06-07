@@ -36,6 +36,17 @@
     margin-bottom: $spacing-md;
     line-height: 1.55;
   }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-sm;
+  }
+
+  &--danger {
+    border-color: rgba($color-error, 0.2);
+
+    h3 { color: $color-error; }
+  }
 }
 
 @keyframes fade-up {

@@ -42,6 +42,40 @@
     }
   }
 
+  &__recent {
+    margin-bottom: $spacing-2xl;
+
+    h2 {
+      @include heading-display;
+      font-size: 1.375rem;
+      margin-bottom: $spacing-lg;
+      color: $color-text;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 32px;
+        height: 2px;
+        margin-top: $spacing-sm;
+        background: linear-gradient(90deg, $color-primary, transparent);
+        border-radius: 1px;
+      }
+    }
+  }
+
+  &__recent-row {
+    display: flex;
+    gap: $spacing-md;
+    overflow-x: auto;
+    padding-bottom: $spacing-sm;
+    scrollbar-width: thin;
+  }
+
+  &__recent-card {
+    flex-shrink: 0;
+    width: 180px;
+  }
+
   &__loader {
     @include flex-center;
     padding: $spacing-2xl;

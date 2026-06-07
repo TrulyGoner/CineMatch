@@ -8,6 +8,9 @@ import {
   selectBehaviorEvents,
   selectBehaviorHash,
 } from '@/features/user-behavior-tracking/model/store';
+import { selectAllRatings } from '@/features/user-rating/model/store';
+import { selectFeedback } from '@/features/recommendation-feedback/model/store';
+import { selectExplorerState, explorerProfileToEvents } from '@/features/explorer/model/store';
 import {
   calculateRecommendations,
   shuffleRecommendations,
@@ -31,16 +34,34 @@ export const useRecommendations = () => {
   const items = useAppSelector(selectRecommendations);
   const cacheHash = useAppSelector(selectRecommendationCacheHash);
   const status = useAppSelector(selectRecommendationStatus);
+  const ratings = useAppSelector(selectAllRatings);
+  const feedback = useAppSelector(selectFeedback);
+  const explorer = useAppSelector(selectExplorerState);
+
+  const explorerEvents = useMemo(
+    () => explorerProfileToEvents(explorer.entries),
+    [explorer.entries]
+  );
+
+  const mergedEvents = useMemo(
+    () => [...events, ...explorerEvents],
+    [events, explorerEvents]
+  );
+
+  const explorerHash = useMemo(() => JSON.stringify(explorer.entries), [explorer.entries]);
 
   const inputHash = useMemo(
     () =>
       JSON.stringify({
         behaviorHash,
+        explorerHash,
         weights,
         abMode,
         catalogIds: catalog.map((c) => `${c.mediaType}-${c.id}`).join(','),
+        ratingsHash: JSON.stringify(ratings),
+        feedbackHash: JSON.stringify(feedback),
       }),
-    [behaviorHash, weights, abMode, catalog]
+    [behaviorHash, explorerHash, weights, abMode, catalog, ratings, feedback]
   );
 
   const recalculate = useCallback(() => {
@@ -53,13 +74,17 @@ export const useRecommendations = () => {
       const result =
         abMode === 'random'
           ? shuffleRecommendations(catalog)
-          : calculateRecommendations(catalog, events, weights);
+          : calculateRecommendations(catalog, mergedEvents, weights, {
+              ratings,
+              feedbackLikes: feedback.likes,
+              feedbackDislikes: feedback.dislikes,
+            });
 
       dispatch(setRecommendations({ items: result, hash: inputHash }));
     } catch {
       dispatch(setError());
     }
-  }, [catalog, inputHash, cacheHash, items.length, abMode, events, weights, dispatch]);
+  }, [catalog, inputHash, cacheHash, items.length, abMode, mergedEvents, weights, dispatch, ratings, feedback]);
 
   useEffect(() => {
     recalculate();

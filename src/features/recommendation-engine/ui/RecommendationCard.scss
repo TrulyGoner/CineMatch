@@ -64,4 +64,8 @@
     color: $color-text-muted;
     margin-top: $spacing-xs;
   }
+
+  &__rating-wrap {
+    margin: $spacing-xs 0;
+  }
 }
