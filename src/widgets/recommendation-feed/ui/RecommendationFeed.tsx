@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getContentKey } from '@/features/content-discovery/api/contentApi';
 import { RecommendationCard } from '@/features/recommendation-engine';
 import { useRecommendations } from '@/features/recommendation-engine/hooks/useRecommendations';
@@ -13,6 +14,7 @@ export const RecommendationFeed = () => {
   const { items, status, recalculate } = useRecommendations();
   const { tracker } = useUserBehavior();
   const { open } = useContentDetail();
+  const { t } = useTranslation();
 
   const handleOpen = useCallback(
     (item: (typeof items)[number]) => {
@@ -32,7 +34,7 @@ export const RecommendationFeed = () => {
   if (status === 'loading' && items.length === 0) {
     return (
       <div className="recommendation-feed">
-        <h2 className="recommendation-feed__title">Подобрано для тебя</h2>
+        <h2 className="recommendation-feed__title">{t('recommendation.pickedForYou')}</h2>
         <div className="recommendation-feed__grid">
           {Array.from({ length: 5 }).map((_, i) => (
             <Skeleton key={i} height="320px" />
@@ -45,10 +47,10 @@ export const RecommendationFeed = () => {
   if (status === 'error' && items.length === 0) {
     return (
       <div className="recommendation-feed">
-        <h2 className="recommendation-feed__title">Подобрано для тебя</h2>
+        <h2 className="recommendation-feed__title">{t('recommendation.pickedForYou')}</h2>
         <div className="recommendation-feed__error">
-          <p>Не удалось рассчитать рекомендации</p>
-          <Button onClick={recalculate}>Повторить</Button>
+          <p>{t('recommendation.errorCalculate')}</p>
+          <Button onClick={recalculate}>{t('recommendation.retry')}</Button>
         </div>
       </div>
     );
@@ -57,7 +59,7 @@ export const RecommendationFeed = () => {
   return (
     <div className="recommendation-feed">
       <div className="recommendation-feed__header">
-        <h2 className="recommendation-feed__title">Подобрано для тебя</h2>
+        <h2 className="recommendation-feed__title">{t('recommendation.pickedForYou')}</h2>
         {status === 'loading' && <Spinner size="sm" />}
       </div>
       <div className="recommendation-feed__grid">
@@ -72,7 +74,7 @@ export const RecommendationFeed = () => {
       </div>
       {items.length === 0 && status !== 'loading' && (
         <p className="recommendation-feed__empty">
-          Загрузите контент и кликните по карточкам — рекомендации появятся здесь
+          {t('recommendation.emptyState')}
         </p>
       )}
     </div>

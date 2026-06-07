@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/app/store';
 import {
   setSearchQuery,
@@ -29,6 +30,7 @@ export const ContentSearchFilter = () => {
   const searchQuery = useAppSelector(selectSearchQuery);
   const selectedGenre = useAppSelector(selectSelectedGenre);
   const { tracker } = useUserBehavior();
+  const { t } = useTranslation();
 
   const debouncedQuery = useDebounce(searchQuery, 300);
 
@@ -59,10 +61,10 @@ export const ContentSearchFilter = () => {
       <input
         type="search"
         className="content-search-filter__input"
-        placeholder="Поиск фильмов и сериалов..."
+        placeholder={t('content.searchPlaceholder')}
         value={searchQuery}
         onChange={(e) => handleSearchChange(e.target.value)}
-        aria-label="Поиск контента"
+        aria-label={t('content.searchAria')}
       />
 
       <div className="content-search-filter__genres">

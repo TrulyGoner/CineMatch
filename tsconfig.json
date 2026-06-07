@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "outDir": "./out",
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@": ["src"],
       "@app": ["src/app"],

@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import './Modal.scss';
 
@@ -20,6 +21,7 @@ export const Modal = ({
   variant = 'default',
 }: ModalProps) => {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -54,7 +56,7 @@ export const Modal = ({
         aria-modal="true"
         aria-label={title}
       >
-        <button type="button" className="modal__close" onClick={onClose} aria-label="Закрыть">
+        <button type="button" className="modal__close" onClick={onClose} aria-label={t('modal.close')}>
           <span className="modal__close-icon" aria-hidden="true" />
         </button>
         {title && <h2 className="modal__title">{title}</h2>}

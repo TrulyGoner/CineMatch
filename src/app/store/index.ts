@@ -6,6 +6,7 @@ import weights from '@/features/recommendation-weights/model/store';
 import abTest from '@/features/ab-test-toggle/model/store';
 import content from '@/features/content-discovery/model/store';
 import contentDetail from '@/features/content-detail/model/store';
+import language from '@/features/language/model/store';
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     abTest: abTest.reducer,
     content: content.reducer,
     contentDetail: contentDetail.reducer,
+    language: language.reducer,
   },
 });
 

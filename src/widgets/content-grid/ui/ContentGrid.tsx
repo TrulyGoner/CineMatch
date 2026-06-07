@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@/app/store';
 import { ContentCard } from '@/entities/content';
 import { getContentKey } from '@/features/content-discovery/api/contentApi';
@@ -19,6 +20,7 @@ interface ContentGridProps {
 
 export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps) => {
   const { status, error, hasMore, loadMore, retry, prefetchNext } = useContentFeed();
+  const { t } = useTranslation();
   const filteredItems = useAppSelector(selectFilteredContent);
   const allItems = useAppSelector(selectAllContent);
   const events = useAppSelector(selectBehaviorEvents);
@@ -69,8 +71,8 @@ export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps)
   if (status === 'error' && allItems.length === 0) {
     return (
       <div className="content-grid__error">
-        <p>{error ?? 'Не удалось загрузить контент'}</p>
-        <Button onClick={retry}>Повторить</Button>
+        <p>{error ?? t('content.errorLoad')}</p>
+        <Button onClick={retry}>{t('content.retry')}</Button>
       </div>
     );
   }
@@ -90,7 +92,7 @@ export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps)
       </div>
 
       {showEmptyFilterMessage && filteredItems.length === 0 && allItems.length > 0 && (
-        <p className="content-grid__empty">Ничего не найдено. Измените поиск или фильтр.</p>
+        <p className="content-grid__empty">{t('content.nothingFound')}</p>
       )}
 
       {status === 'error' && allItems.length > 0 && (
@@ -104,7 +106,7 @@ export const ContentGrid = ({ showEmptyFilterMessage = true }: ContentGridProps)
             onClick={loadMore}
             disabled={status === 'loading'}
           >
-            {status === 'loading' ? <Spinner size="sm" /> : 'Загрузить ещё'}
+            {status === 'loading' ? <Spinner size="sm" /> : t('content.loadMore')}
           </Button>
         </div>
       )}

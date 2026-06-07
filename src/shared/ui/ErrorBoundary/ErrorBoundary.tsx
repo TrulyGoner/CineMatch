@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import i18n from '@/shared/config/i18n';
 import { Button } from '@/shared/ui/Button';
 import './ErrorBoundary.scss';
 
@@ -33,9 +34,9 @@ export class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="error-boundary">
-          <h2>Что-то пошло не так</h2>
-          <p>{this.state.error?.message ?? 'Неизвестная ошибка'}</p>
-          <Button onClick={this.handleReset}>Попробовать снова</Button>
+          <h2>{i18n.t('errors.somethingWrong')}</h2>
+          <p>{this.state.error?.message ?? i18n.t('errors.unknownError')}</p>
+          <Button onClick={this.handleReset}>{i18n.t('errors.retry')}</Button>
         </div>
       );
     }

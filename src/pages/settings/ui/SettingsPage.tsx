@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { WeightsSlider } from '@/features/recommendation-weights';
 import { ABTestToggle } from '@/features/ab-test-toggle';
 import { useAppDispatch } from '@/app/store';
@@ -7,26 +8,27 @@ import './SettingsPage.scss';
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   return (
     <div className="settings-page">
-      <h1>Настройки</h1>
+      <h1>{t('settings.title')}</h1>
       <div className="settings-page__grid">
         <WeightsSlider />
         <div className="settings-page__card">
-          <h3>A/B тест рекомендаций</h3>
+          <h3>{t('settings.abTest')}</h3>
           <p className="settings-page__hint">
-            Режим A — персонализированные рекомендации. Режим B — случайная подборка.
+            {t('settings.abTestHint')}
           </p>
           <ABTestToggle />
         </div>
         <div className="settings-page__card">
-          <h3>Данные поведения</h3>
+          <h3>{t('settings.behaviorData')}</h3>
           <p className="settings-page__hint">
-            Очистить историю кликов и просмотров из localStorage.
+            {t('settings.behaviorHint')}
           </p>
           <Button variant="secondary" onClick={() => dispatch(clearEvents())}>
-            Очистить историю
+            {t('settings.clearHistory')}
           </Button>
         </div>
       </div>

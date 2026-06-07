@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/shared/config/i18n';
 import { useAppSelector } from '@/app/store';
 import { selectBehaviorEvents } from '@/features/user-behavior-tracking/model/store';
 import { computeContentMetrics } from '@/features/user-behavior-tracking/lib/metrics';
@@ -13,6 +15,7 @@ import './ContentDetailModal.scss';
 export const ContentDetailModal = () => {
   const { item, reasons, isOpen, close } = useContentDetail();
   const events = useAppSelector(selectBehaviorEvents);
+  const { t } = useTranslation();
 
   const metrics = useMemo(
     () => (item ? computeContentMetrics(item.id, events) : null),
@@ -22,7 +25,7 @@ export const ContentDetailModal = () => {
   if (!item) return null;
 
   const backdropUrl = buildTmdbImageUrl(item.backdropPath, 'w780');
-  const mediaLabel = item.mediaType === 'tv' ? 'Сериал' : 'Фильм';
+  const mediaLabel = item.mediaType === 'tv' ? t('detail.series') : t('detail.movie');
   const hasEngagement = metrics && (metrics.clickCount > 0 || metrics.viewDuration > 0);
 
   return (
@@ -66,7 +69,7 @@ export const ContentDetailModal = () => {
             <p className="content-detail-modal__meta">
               {formatDate(item.releaseDate)}
               <span className="content-detail-modal__dot">·</span>
-              {item.voteCount.toLocaleString('ru-RU')} оценок
+              {item.voteCount.toLocaleString(i18n.language === 'ru' ? 'ru-RU' : 'en-US')} {t('detail.votes')}
             </p>
 
             {item.genres.length > 0 && (
@@ -86,21 +89,21 @@ export const ContentDetailModal = () => {
           )}
 
             <p className="content-detail-modal__overview">
-              {item.overview || 'Описание пока недоступно.'}
+              {item.overview || t('detail.noDescription')}
             </p>
 
             {hasEngagement && metrics && (
               <div className="content-detail-modal__metrics">
-                <p className="content-detail-modal__metrics-label">Ваша история</p>
+                <p className="content-detail-modal__metrics-label">{t('detail.yourHistory')}</p>
                 <div className="content-detail-modal__metrics-row">
                   {metrics.clickCount > 0 && (
                     <span className="content-detail-modal__metric">
-                      {metrics.clickCount} клик{metrics.clickCount > 1 ? 'а' : ''}
+                      {metrics.clickCount} {t('detail.click')}{metrics.clickCount > 1 ? t('detail.clickAlt') : ''}
                     </span>
                   )}
                   {metrics.viewDuration > 0 && (
                     <span className="content-detail-modal__metric">
-                      {formatDuration(metrics.viewDuration)} просмотра
+                      {formatDuration(metrics.viewDuration)} {t('detail.views')}
                     </span>
                   )}
                 </div>

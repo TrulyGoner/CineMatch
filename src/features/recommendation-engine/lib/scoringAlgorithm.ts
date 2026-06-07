@@ -1,3 +1,4 @@
+import i18n from '@/shared/config/i18n';
 import type { Content } from '@/entities/content/model/types';
 import type { Recommendation } from '@/entities/recommendation/model/types';
 import type { UserBehaviorEvent } from '@/entities/analytics/model/types';
@@ -61,8 +62,8 @@ export const calculateRecommendations = (
 
     const reasons =
       topGenres.length > 0
-        ? [`На основе вашего интереса к: ${topGenres.join(', ')}`]
-        : ['Популярный контент в каталоге'];
+        ? [`__interest__:${topGenres.join(',')}`]
+        : [i18n.t('whyRecommended.popularContent')];
 
     return { ...content, score: totalScore, reasons };
   });
@@ -82,6 +83,6 @@ export const shuffleRecommendations = (contents: Content[]): Recommendation[] =>
   return shuffled.slice(0, RECOMMENDATION_TOP_N).map((content) => ({
     ...content,
     score: 0,
-    reasons: ['Случайная подборка (режим B)'],
+    reasons: [i18n.t('whyRecommended.randomMode')],
   }));
 };
