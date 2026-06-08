@@ -5,7 +5,6 @@ export const env = {
   /** В dev — через прокси Vite, чтобы обойти блокировку TMDB CDN. */
   tmdbImageOrigin: isDev ? '/tmdb-img' : 'https://image.tmdb.org',
   tmdbApiBase: isDev ? '/tmdb-api/3' : 'https://api.themoviedb.org/3',
-  tmdbWwwBase: isDev ? '/tmdb-www' : 'https://www.themoviedb.org',
 } as const;
 
 export const hasApiKey = (): boolean =>
