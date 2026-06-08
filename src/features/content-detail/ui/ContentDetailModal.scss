@@ -300,11 +300,48 @@
     }
 
     &__poster-wrap {
-      max-width: 140px;
+      max-width: 120px;
+    }
+
+    &__poster-wrap::after {
+      display: none;
     }
 
     &__hero {
-      height: 160px;
+      height: 140px;
+    }
+
+    &__poster {
+      margin-top: $spacing-sm;
+    }
+
+    &__actions {
+      .save-btn span {
+        display: none;
+      }
+    }
+
+    &__shell {
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      min-height: 100dvh;
+    }
+
+    &__info {
+      padding-bottom: $spacing-xl;
+    }
+
+    &__similar-row {
+      gap: $spacing-xs;
+    }
+
+    &__similar-card {
+      width: 80px;
+    }
+
+    &__overview {
+      font-size: 0.875rem;
     }
   }
 }

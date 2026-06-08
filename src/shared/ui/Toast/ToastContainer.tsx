@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store';
 import { removeToast, selectToasts, type ToastType } from './store';
+import { Icon } from '@/shared/ui/Icon';
 import './ToastContainer.scss';
 
 export const ToastContainer = () => {
@@ -42,13 +43,13 @@ const ToastItem = ({ id, type, message, duration, onRemove }: ToastItemProps) =>
   return (
     <div className={`toast toast--${type}`} role="alert">
       <span className="toast__icon">
-        {type === 'success' && '✓'}
-        {type === 'error' && '✗'}
-        {type === 'info' && 'i'}
+        {type === 'success' && <Icon name="checkmark" />}
+        {type === 'error' && <Icon name="x" />}
+        {type === 'info' && <Icon name="info" />}
       </span>
       <span className="toast__message">{message}</span>
       <button type="button" className="toast__close" onClick={handleClose} aria-label="Close">
-        ✕
+        <Icon name="x" size={14} />
       </button>
     </div>
   );

@@ -5,6 +5,11 @@
   gap: $spacing-lg;
   padding: $spacing-xl 0;
 
+  @media (max-width: 480px) {
+    padding: $spacing-md 0;
+    gap: $spacing-md;
+  }
+
   &--loading, &--done {
     justify-content: center;
     min-height: 400px;
@@ -15,8 +20,8 @@
   }
 
   &__done-icon {
-    font-size: 3rem;
     margin-bottom: $spacing-sm;
+    color: $color-primary;
   }
 
   &__done-title {
@@ -91,34 +96,18 @@
     min-height: 400px;
   }
 
+  @media (max-width: 480px) {
+    &__stack-cards {
+      min-height: 300px;
+    }
+  }
+
   &__stack-card {
     position: absolute;
     inset: 0;
     border-radius: $radius-xl;
     overflow: hidden;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-
-    &--3 {
-      top: 12px;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid $color-border;
-      transform: scale(0.92) translateY(16px);
-      z-index: 0;
-    }
-
-    &--2 {
-      top: 6px;
-      left: 6px;
-      right: 6px;
-      bottom: 6px;
-      background: $color-surface-elevated;
-      border: 1px solid $color-border-strong;
-      transform: scale(0.96) translateY(8px);
-      z-index: 1;
-    }
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 
     &--1 {
       position: relative;
@@ -128,13 +117,27 @@
 
       &:active { cursor: grabbing; }
 
-      &--dragging {
-        transition: none;
-      }
-
       &--exiting {
         pointer-events: none;
       }
+    }
+
+    &--2 {
+      z-index: 1;
+      background: $color-surface-elevated;
+      border: 1px solid $color-border-strong;
+    }
+
+    &--3 {
+      z-index: 0;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid $color-border;
+    }
+
+    &--4 {
+      z-index: -1;
+      background: rgba(255,255,255,0.01);
+      border: 1px solid rgba(232, 184, 101, 0.06);
     }
   }
 

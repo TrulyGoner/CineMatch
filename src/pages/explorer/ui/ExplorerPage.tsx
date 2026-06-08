@@ -4,7 +4,7 @@ import './ExplorerPage.scss';
 
 const ExplorerPage = () => {
   const { t } = useTranslation();
-  const explorer = useExplorer();
+  const { current, nextItems, queueSize, completed, seenCount, makeDecision, onReset } = useExplorer();
 
   return (
     <div className="explorer-page">
@@ -12,7 +12,15 @@ const ExplorerPage = () => {
         <h1 className="explorer-page__title">{t('explorer.title')}</h1>
         <p className="explorer-page__desc">{t('explorer.description')}</p>
       </div>
-      <ExplorerMode {...explorer} />
+      <ExplorerMode
+        current={current}
+        nextItems={nextItems}
+        queueSize={queueSize}
+        completed={completed}
+        seenCount={seenCount}
+        makeDecision={makeDecision}
+        onReset={onReset}
+      />
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import { memo, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Content, ContentMetrics } from '@/entities/content/model/types';
 import { Card } from '@/shared/ui/Card';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { SaveButton } from '@/features/saved-content';
 import { StarRating } from '@/features/user-rating';
 import { formatDate, formatDuration } from '@/shared/lib/formatters';
+import { Icon } from '@/shared/ui/Icon';
 import './ContentCard.scss';
 
 interface ContentCardProps {
@@ -17,6 +19,7 @@ interface ContentCardProps {
 export const ContentCard = memo(({ item, metrics, onOpen, onView }: ContentCardProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const primaryGenre = item.genres[0];
+  const { t } = useTranslation();
 
   const handleClick = useCallback(() => {
     onOpen?.(item);
@@ -62,7 +65,7 @@ export const ContentCard = memo(({ item, metrics, onOpen, onView }: ContentCardP
       <div className="content-card__body">
         <h3 className="content-card__title">{item.title}</h3>
         <p className="content-card__meta">
-          {formatDate(item.releaseDate)} · ★ {item.voteAverage.toFixed(1)}
+          {formatDate(item.releaseDate)} · <Icon name="star-filled" size={12} color="var(--color-primary)" /> {item.voteAverage.toFixed(1)}
         </p>
         {item.genres.length > 0 && (
           <div className="content-card__genres">
@@ -78,9 +81,11 @@ export const ContentCard = memo(({ item, metrics, onOpen, onView }: ContentCardP
         </div>
         {hasMetrics && metrics && (
           <div className="content-card__metrics">
-            {metrics.clickCount > 0 && <span>{metrics.clickCount} {metrics.clickCount === 1 ? 'click' : 'clicks'}</span>}
+            {metrics.clickCount > 0 && (
+              <span>{metrics.clickCount} {metrics.clickCount === 1 ? t('content.click') : t('content.clicks')}</span>
+            )}
             {metrics.viewDuration > 0 && (
-              <span>{formatDuration(metrics.viewDuration)} viewed</span>
+              <span>{formatDuration(metrics.viewDuration)} {t('content.viewed')}</span>
             )}
           </div>
         )}

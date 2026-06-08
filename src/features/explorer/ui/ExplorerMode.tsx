@@ -2,25 +2,43 @@ import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Content } from '@/entities/content/model/types';
 import { ExplorerCard } from './ExplorerCard';
+import { Icon } from '@/shared/ui/Icon';
 import './ExplorerMode.scss';
 
 const SWIPE_THRESHOLD = 80;
 
 interface ExplorerModeProps {
   current: Content | null;
+  nextItems: Content[];
   queueSize: number;
-  remainingCount: number;
   completed: boolean;
-  onDecision: (decision: 'like' | 'dislike' | 'skip') => void;
+  seenCount: number;
+  makeDecision: (content: Content, decision: 'like' | 'dislike' | 'skip') => void;
   onReset: () => void;
 }
 
+const getStackTransform = (depth: number, progress: number, animatingOut: unknown, step: number): string => {
+  const baseScale = 1 - (depth + 1) * 0.04;
+  const targetScale = 1 - depth * 0.04;
+  const baseY = (depth + 1) * step;
+  const targetY = depth * step;
+
+  if (animatingOut || progress >= 1) {
+    return `scale(${targetScale}) translateY(${targetY}px)`;
+  }
+
+  const scale = baseScale + (targetScale - baseScale) * progress;
+  const y = baseY + (targetY - baseY) * progress;
+  return `scale(${scale}) translateY(${y}px)`;
+};
+
 export const ExplorerMode = ({
   current,
+  nextItems,
   queueSize,
-  remainingCount,
   completed,
-  onDecision,
+  seenCount,
+  makeDecision,
   onReset,
 }: ExplorerModeProps) => {
   const { t } = useTranslation();
@@ -28,8 +46,12 @@ export const ExplorerMode = ({
   const [animatingOut, setAnimatingOut] = useState<'left' | 'right' | null>(null);
   const startXRef = useRef(0);
   const offsetRef = useRef(0);
+  const decisionLockRef = useRef(false);
+  const [isMobile] = useState(() => window.matchMedia('(max-width: 480px)').matches);
 
   const animating = animatingOut !== null;
+  const step = isMobile ? 6 : 8;
+  const progress = swipeOffset === 0 ? 0 : Math.min(Math.abs(swipeOffset) / SWIPE_THRESHOLD, 1);
 
   const resetSwipe = useCallback(() => {
     setSwipeOffset(0);
@@ -38,19 +60,28 @@ export const ExplorerMode = ({
 
   const commitDecision = useCallback(
     (decision: 'like' | 'dislike' | 'skip') => {
-      if (animating) return;
-      if (decision === 'like') {
-        setAnimatingOut('right');
-        setTimeout(() => { setAnimatingOut(null); onDecision('like'); resetSwipe(); }, 300);
-      } else if (decision === 'dislike') {
-        setAnimatingOut('left');
-        setTimeout(() => { setAnimatingOut(null); onDecision('dislike'); resetSwipe(); }, 300);
-      } else {
-        onDecision('skip');
+      if (animating || decisionLockRef.current) return;
+      if (!current) return;
+      decisionLockRef.current = true;
+
+      if (decision === 'skip') {
+        makeDecision(current, 'skip');
         resetSwipe();
+        decisionLockRef.current = false;
+        return;
       }
+
+      const direction = decision === 'like' ? 'right' : 'left';
+      setAnimatingOut(direction);
+
+      setTimeout(() => {
+        setAnimatingOut(null);
+        makeDecision(current, decision);
+        resetSwipe();
+        decisionLockRef.current = false;
+      }, 300);
     },
-    [animating, onDecision, resetSwipe]
+    [animating, current, makeDecision, resetSwipe]
   );
 
   const onPointerUp = useCallback(() => {
@@ -65,7 +96,7 @@ export const ExplorerMode = ({
   }, [commitDecision, resetSwipe]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (animating) return;
+    if (animating || decisionLockRef.current) return;
     e.preventDefault();
     startXRef.current = e.clientX;
     offsetRef.current = 0;
@@ -88,14 +119,14 @@ export const ExplorerMode = ({
   }, [animating, onPointerUp]);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (animating) return;
+    if (animating || decisionLockRef.current) return;
     const touch = e.touches[0];
     startXRef.current = touch.clientX;
     offsetRef.current = 0;
   }, [animating]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (animating) return;
+    if (animating || decisionLockRef.current) return;
     const touch = e.touches[0];
     const dx = touch.clientX - startXRef.current;
     const clamped = Math.max(-300, Math.min(300, dx));
@@ -104,13 +135,11 @@ export const ExplorerMode = ({
   }, [animating]);
 
   const handleTouchEnd = useCallback(() => {
-    if (animating) return;
+    if (animating || decisionLockRef.current) return;
     onPointerUp();
   }, [animating, onPointerUp]);
 
   const cardStyle: React.CSSProperties = { touchAction: 'none' };
-  const showLikeHint = swipeOffset > 30;
-  const showDislikeHint = swipeOffset < -30;
 
   if (animatingOut) {
     cardStyle.transform = `translateX(${animatingOut === 'right' ? '120%' : '-120%'}) rotate(${animatingOut === 'right' ? '15deg' : '-15deg'})`;
@@ -119,13 +148,17 @@ export const ExplorerMode = ({
   } else if (swipeOffset !== 0) {
     const rotation = swipeOffset * 0.08;
     cardStyle.transform = `translateX(${swipeOffset}px) rotate(${rotation}deg)`;
-    cardStyle.cursor = 'grabbing';
+    cardStyle.transition = 'none';
   }
+
+  const showLikeHint = swipeOffset > 30;
+  const showDislikeHint = swipeOffset < -30;
+  const stackTrans = swipeOffset !== 0 ? 'none' : undefined;
 
   if (completed) {
     return (
       <div className="explorer-mode explorer-mode--done">
-        <div className="explorer-mode__done-icon">🎯</div>
+        <div className="explorer-mode__done-icon"><Icon name="target" size={48} /></div>
         <h2 className="explorer-mode__done-title">{t('explorer.doneTitle')}</h2>
         <p className="explorer-mode__done-text">{t('explorer.doneText')}</p>
         <button type="button" className="explorer-mode__reset-btn" onClick={onReset}>
@@ -150,20 +183,43 @@ export const ExplorerMode = ({
         <div className="explorer-mode__progress-bar">
           <div
             className="explorer-mode__progress-fill"
-            style={{ width: `${Math.min(100, ((queueSize - remainingCount) / queueSize) * 100)}%` }}
+            style={{ width: `${Math.min(100, (seenCount / queueSize) * 100)}%` }}
           />
         </div>
         <span className="explorer-mode__progress-label">
-          {queueSize - remainingCount} / {queueSize}
+          {seenCount} / {queueSize}
         </span>
       </div>
 
       <div className="explorer-mode__stack">
         <div className="explorer-mode__stack-cards">
-          <div className="explorer-mode__stack-card explorer-mode__stack-card--3" />
-          <div className="explorer-mode__stack-card explorer-mode__stack-card--2" />
+          {nextItems[2] && (
+            <div
+              className="explorer-mode__stack-card explorer-mode__stack-card--4"
+              style={{ transform: getStackTransform(2, progress, animatingOut, step), transition: stackTrans }}
+            >
+              <ExplorerCard item={nextItems[2]} dimmed />
+            </div>
+          )}
+          {nextItems[1] && (
+            <div
+              className="explorer-mode__stack-card explorer-mode__stack-card--3"
+              style={{ transform: getStackTransform(1, progress, animatingOut, step), transition: stackTrans }}
+            >
+              <ExplorerCard item={nextItems[1]} dimmed />
+            </div>
+          )}
+          {nextItems[0] && (
+            <div
+              className="explorer-mode__stack-card explorer-mode__stack-card--2"
+              style={{ transform: getStackTransform(0, progress, animatingOut, step), transition: stackTrans }}
+            >
+              <ExplorerCard item={nextItems[0]} dimmed />
+            </div>
+          )}
           <div
-            className={`explorer-mode__stack-card explorer-mode__stack-card--1 ${swipeOffset !== 0 ? 'explorer-mode__stack-card--dragging' : ''} ${animatingOut ? 'explorer-mode__stack-card--exiting' : ''}`}
+            key={current.id}
+            className={`explorer-mode__stack-card explorer-mode__stack-card--1 ${animatingOut ? 'explorer-mode__stack-card--exiting' : ''}`}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -172,12 +228,12 @@ export const ExplorerMode = ({
           >
             {showLikeHint && (
               <div className="explorer-mode__hint-label explorer-mode__hint-label--like">
-                ♥ {t('explorer.like')}
+                <Icon name="heart-filled" /> {t('explorer.like')}
               </div>
             )}
             {showDislikeHint && (
               <div className="explorer-mode__hint-label explorer-mode__hint-label--dislike">
-                ✕ {t('explorer.dislike')}
+                <Icon name="x" /> {t('explorer.dislike')}
               </div>
             )}
             <ExplorerCard item={current} />
@@ -192,7 +248,7 @@ export const ExplorerMode = ({
           onClick={() => commitDecision('dislike')}
           aria-label={t('explorer.dislike')}
         >
-          ✕
+          <Icon name="x" size={24} />
         </button>
         <button
           type="button"
@@ -208,7 +264,7 @@ export const ExplorerMode = ({
           onClick={() => commitDecision('like')}
           aria-label={t('explorer.like')}
         >
-          ♥
+          <Icon name="heart-filled" size={24} />
         </button>
       </div>
 

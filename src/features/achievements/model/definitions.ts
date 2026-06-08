@@ -1,6 +1,5 @@
 export interface Achievement {
   id: string;
-  key: string;
   icon: string;
   titleKey: string;
   descKey: string;
@@ -17,59 +16,52 @@ export interface AchievementStats {
 
 export const ACHIEVEMENTS: Achievement[] = [
   {
-    id: 'first_rating',
-    key: 'first_rating',
-    icon: '⭐',
-    titleKey: 'achievements.firstRatingTitle',
-    descKey: 'achievements.firstRatingDesc',
+    id: 'first_click',
+    icon: 'star',
+    titleKey: 'achievements.firstClick',
+    descKey: 'achievements.firstClickDesc',
     condition: (s) => s.ratingsCount >= 1,
   },
   {
-    id: 'explorer_10',
-    key: 'explorer_10',
-    icon: '🔍',
-    titleKey: 'achievements.explorerTitle',
+    id: 'explorer',
+    icon: 'search',
+    titleKey: 'achievements.explorer',
     descKey: 'achievements.explorerDesc',
     condition: (s) => s.explorerDecisions >= 10,
   },
   {
-    id: 'collector_10',
-    key: 'collector_10',
-    icon: '📦',
-    titleKey: 'achievements.collectorTitle',
+    id: 'collector',
+    icon: 'package',
+    titleKey: 'achievements.collector',
     descKey: 'achievements.collectorDesc',
-    condition: (s) => s.savedCount >= 10,
+    condition: (s) => s.savedCount >= 5,
   },
   {
-    id: 'collector_50',
-    key: 'collector_50',
-    icon: '🏛',
-    titleKey: 'achievements.collector50Title',
-    descKey: 'achievements.collector50Desc',
-    condition: (s) => s.savedCount >= 50,
-  },
-  {
-    id: 'critic_5',
-    key: 'critic_5',
-    icon: '🎬',
-    titleKey: 'achievements.criticTitle',
+    id: 'critic',
+    icon: 'star',
+    titleKey: 'achievements.critic',
     descKey: 'achievements.criticDesc',
-    condition: (s) => s.ratingsCount >= 5,
+    condition: (s) => s.ratingsCount >= 10,
   },
   {
-    id: 'social_10',
-    key: 'social_10',
-    icon: '👍',
-    titleKey: 'achievements.socialTitle',
-    descKey: 'achievements.socialDesc',
+    id: 'viewer',
+    icon: 'eye',
+    titleKey: 'achievements.viewer',
+    descKey: 'achievements.viewerDesc',
+    condition: (s) => s.viewsLogged >= 20,
+  },
+  {
+    id: 'feedback_giver',
+    icon: 'thumbs-up',
+    titleKey: 'achievements.feedbackGiver',
+    descKey: 'achievements.feedbackGiverDesc',
     condition: (s) => s.likesGiven >= 10,
   },
   {
-    id: 'viewer_100',
-    key: 'viewer_100',
-    icon: '👁',
-    titleKey: 'achievements.viewerTitle',
-    descKey: 'achievements.viewerDesc',
-    condition: (s) => s.viewsLogged >= 100,
+    id: 'diversity',
+    icon: 'rainbow',
+    titleKey: 'achievements.diversity',
+    descKey: 'achievements.diversityDesc',
+    condition: (s) => s.ratingsCount >= 1 && s.explorerDecisions >= 1 && s.savedCount >= 1 && s.likesGiven >= 1,
   },
 ];

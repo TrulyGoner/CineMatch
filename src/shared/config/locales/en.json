@@ -20,7 +20,10 @@
     "loadMore": "Load more",
     "nothingFound": "Nothing found. Change your search or filter.",
     "errorLoad": "Failed to load content",
-    "retry": "Retry"
+    "retry": "Retry",
+    "click": "click",
+    "clicks": "clicks",
+    "viewed": "viewed"
   },
   "dashboard": {
     "title": "Behavior Dashboard",

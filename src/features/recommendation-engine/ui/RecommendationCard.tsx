@@ -5,6 +5,7 @@ import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { formatDate } from '@/shared/lib/formatters';
 import { StarRating } from '@/features/user-rating';
 import { FeedbackButtons } from '@/features/recommendation-feedback';
+import { Icon } from '@/shared/ui/Icon';
 import { WhyRecommended } from './WhyRecommended';
 import './RecommendationCard.scss';
 
@@ -62,7 +63,7 @@ export const RecommendationCard = memo(({ item, onOpen, onView }: Recommendation
       <div className="recommendation-card__body">
         <h3 className="recommendation-card__title">{item.title}</h3>
         <p className="recommendation-card__meta">
-          {formatDate(item.releaseDate)} · ★ {item.voteAverage.toFixed(1)}
+          {formatDate(item.releaseDate)} · <Icon name="star-filled" size={12} color="var(--color-primary)" /> {item.voteAverage.toFixed(1)}
         </p>
         <div className="recommendation-card__rating-wrap">
           <StarRating contentKey={contentKey} size="sm" />

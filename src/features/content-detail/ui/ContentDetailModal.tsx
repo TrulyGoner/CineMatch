@@ -11,6 +11,7 @@ import { FeedbackButtons } from '@/features/recommendation-feedback';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { buildTmdbImageUrl } from '@/shared/lib/tmdbImages';
 import { formatDate, formatDuration } from '@/shared/lib/formatters';
+import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
 import { useContentDetail } from '../hooks/useContentDetail';
 import { fetchSimilar, fetchWatchProviders } from '@/features/content-discovery/api/contentApi';
@@ -119,7 +120,7 @@ export const ContentDetailModal = () => {
             <div className="content-detail-modal__labels">
               <span className="content-detail-modal__badge">{mediaLabel}</span>
               <span className="content-detail-modal__rating">
-                ★ {item.voteAverage.toFixed(1)}
+                <Icon name="star-filled" size={14} /> {item.voteAverage.toFixed(1)}
               </span>
             </div>
 

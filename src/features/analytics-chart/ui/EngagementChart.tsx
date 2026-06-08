@@ -24,13 +24,13 @@ export const EngagementChart = ({ data }: EngagementChartProps) => {
       <h3 className="engagement-chart__title">{t('chart.engagementTitle')}</h3>
       <ResponsiveContainer width="100%" height={260}>
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#2e3344" />
-          <XAxis dataKey="time" stroke="#9aa3b5" fontSize={12} />
-          <YAxis stroke="#9aa3b5" fontSize={12} allowDecimals={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+          <XAxis dataKey="time" stroke="var(--chart-axis)" fontSize={12} />
+          <YAxis stroke="var(--chart-axis)" fontSize={12} allowDecimals={false} />
           <Tooltip
             contentStyle={{
-              background: '#1a1d27',
-              border: '1px solid #2e3344',
+              background: 'var(--chart-tooltip-bg)',
+              border: '1px solid var(--chart-tooltip-border)',
               borderRadius: 8,
             }}
           />
@@ -39,7 +39,7 @@ export const EngagementChart = ({ data }: EngagementChartProps) => {
             type="monotone"
             dataKey="clicks"
             name={t('chart.clicks')}
-            stroke="#6c8cff"
+            stroke="var(--chart-line-clicks)"
             strokeWidth={2}
             dot={{ r: 3 }}
           />
@@ -47,7 +47,7 @@ export const EngagementChart = ({ data }: EngagementChartProps) => {
             type="monotone"
             dataKey="views"
             name={t('chart.views')}
-            stroke="#ff6b9d"
+            stroke="var(--chart-line-views)"
             strokeWidth={2}
             dot={{ r: 3 }}
           />

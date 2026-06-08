@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/app/store';
 import { selectAllContent, appendContent } from '@/features/content-discovery/model/store';
 import { fetchMovies } from '@/features/content-discovery/api/contentApi';
 import type { Content } from '@/entities/content/model/types';
+import { incrementStat } from '@/features/achievements';
 import {
   recordDecision,
   resetExplorer,
@@ -50,22 +51,25 @@ export const useExplorer = () => {
   }, [completed, unseenPool.length, dispatch]);
 
   const current: Content | null = unseenPool[0] ?? null;
+  const nextItems: Content[] = unseenPool.slice(1, 4);
   const remainingCount = Math.min(unseenPool.length, EXPLORER_QUEUE_SIZE);
 
-  const handleDecision = useCallback(
-    (decision: 'like' | 'dislike' | 'skip') => {
-      if (!current) return;
+  const makeDecision = useCallback(
+    (content: Content, decision: 'like' | 'dislike' | 'skip') => {
       dispatch(
         recordDecision({
-          contentId: current.id,
-          mediaType: current.mediaType,
-          genres: current.genres,
+          contentId: content.id,
+          mediaType: content.mediaType,
+          genres: content.genres,
           decision,
           timestamp: Date.now(),
         })
       );
+      if (decision !== 'skip') {
+        dispatch(incrementStat({ explorerDecisions: 1 }));
+      }
     },
-    [current, dispatch]
+    [dispatch]
   );
 
   const handleReset = useCallback(() => {
@@ -75,10 +79,12 @@ export const useExplorer = () => {
 
   return {
     current,
+    nextItems,
     queueSize: EXPLORER_QUEUE_SIZE,
     remainingCount,
     completed,
-    onDecision: handleDecision,
+    makeDecision,
     onReset: handleReset,
+    seenCount: seenIds.length,
   };
 };
