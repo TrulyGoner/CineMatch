@@ -9,11 +9,13 @@ interface DetailPayload {
 interface DetailState {
   item: Content | null;
   reasons: string[];
+  isOpen: boolean;
 }
 
 const initialState: DetailState = {
   item: null,
   reasons: [],
+  isOpen: false,
 };
 
 const contentDetailSlice = createSlice({
@@ -23,10 +25,12 @@ const contentDetailSlice = createSlice({
     openDetail(state, action: PayloadAction<DetailPayload>) {
       state.item = action.payload.item;
       state.reasons = action.payload.reasons ?? [];
+      state.isOpen = true;
     },
     closeDetail(state) {
       state.item = null;
       state.reasons = [];
+      state.isOpen = false;
     },
   },
 });
@@ -41,4 +45,4 @@ export const selectDetailReasons = (state: { contentDetail: DetailState }): stri
   state.contentDetail.reasons;
 
 export const selectIsDetailOpen = (state: { contentDetail: DetailState }): boolean =>
-  state.contentDetail.item !== null;
+  state.contentDetail.isOpen;

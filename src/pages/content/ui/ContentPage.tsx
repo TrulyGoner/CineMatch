@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ContentGrid } from '@/widgets/content-grid';
 import { ContentSearchFilter } from '@/features/content-discovery/ui/ContentSearchFilter';
+import { ContentSort } from '@/features/content-discovery/ui/ContentSort';
 import './ContentPage.scss';
 
 export const ContentPage = () => {
@@ -13,6 +14,9 @@ export const ContentPage = () => {
         {t('content.description')}
       </p>
       <ContentSearchFilter />
+      <div className="content-page__toolbar">
+        <ContentSort />
+      </div>
       <ContentGrid />
     </div>
   );

@@ -1,0 +1,93 @@
+.profile-page {
+  animation: fade-up 0.5s ease;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $color-primary-dim, $color-accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid rgba($color-primary, 0.3);
+  }
+
+  &__avatar-letter {
+    font-family: $font-display;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $color-primary;
+  }
+
+  &__header-info {
+    h1 {
+      @include heading-display;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    color: $color-text-muted;
+  }
+
+  &__section {
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: $spacing-md;
+  }
+
+  &__stat-card {
+    @include glass-surface;
+    padding: $spacing-lg;
+    border-radius: $radius-lg;
+    text-align: center;
+    transition: border-color $transition-fast;
+
+    &:hover {
+      border-color: $color-border-strong;
+    }
+  }
+
+  &__stat-value {
+    display: block;
+    font-family: $font-display;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $color-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__stat-label {
+    font-size: 0.8125rem;
+    color: $color-text-muted;
+  }
+
+  &__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+  }
+
+  &__genre-chip {
+    font-size: 0.8125rem;
+    padding: $spacing-xs $spacing-md;
+    background: rgba($color-primary, 0.08);
+    border: 1px solid rgba($color-primary, 0.15);
+    border-radius: 99px;
+    color: $color-primary;
+  }
+}

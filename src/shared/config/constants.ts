@@ -14,6 +14,8 @@ export const STORAGE_KEYS = {
   explorer: 'explorer_profile',
   theme: 'app_theme',
   achievements: 'achievements',
+  collections: 'collections',
+  historyViews: 'history_views',
 } as const;
 
 export const RECOMMENDATION_INTERVAL_MS = 30_000;

@@ -11,6 +11,7 @@ import {
   buildGenreHeatmap,
   calculatePersonalizationScore,
 } from '@/features/analytics-chart';
+import { AchievementBadge } from '@/features/achievements';
 import { selectBehaviorEvents } from '@/features/user-behavior-tracking/model/store';
 import { selectRecommendations } from '@/features/recommendation-engine/model/store';
 import { selectFeedback } from '@/features/recommendation-feedback/model/store';
@@ -47,6 +48,7 @@ export const UserDashboard = () => {
         <ActivityCalendar events={events} />
       </div>
       <ContentHeatmap data={heatmapData} />
+      <AchievementBadge />
     </div>
   );
 };

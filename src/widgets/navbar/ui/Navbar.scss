@@ -41,15 +41,25 @@
     max-width: 148px;
     object-fit: contain;
     object-position: left center;
-    // показываем только wordmark без дублирования иконки слева
     clip-path: inset(0 0 0 24%);
     margin-left: -10px;
   }
 
   &__nav {
     display: flex;
+    align-items: center;
     gap: $spacing-xs;
     flex: 1;
+  }
+
+  &__nav-links {
+    display: flex;
+    gap: $spacing-xs;
+    flex: 1;
+  }
+
+  &__nav-actions {
+    display: none;
   }
 
   &__link {
@@ -58,6 +68,8 @@
     font-weight: 500;
     color: $color-text-muted;
     border-radius: 99px;
+    text-decoration: none;
+    white-space: nowrap;
     transition: color $transition-fast, background $transition-fast;
 
     &:hover {
@@ -78,15 +90,125 @@
     flex-shrink: 0;
   }
 
+  &__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background: transparent;
+    border: none;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &__hamburger-bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: $color-text;
+    border-radius: 2px;
+    transition: all $transition-fast;
+    transform-origin: center;
+  }
+
+  &__hamburger--open &__hamburger-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  &__hamburger--open &__hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  &__hamburger--open &__hamburger-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  &__overlay {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     &__nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100dvh;
+      flex-direction: column;
+      align-items: stretch;
+      padding: $spacing-2xl $spacing-lg $spacing-lg;
+      background: $color-surface;
+      border-left: 1px solid $color-border-strong;
+      box-shadow: $shadow-lg;
+      z-index: $z-modal;
+      transition: right 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      gap: 0;
+
+      &--open {
+        right: 0;
+      }
+    }
+
+    &__nav-links {
+      flex-direction: column;
+      gap: $spacing-xs;
+      margin-bottom: auto;
+    }
+
+    &__nav-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-md;
+      padding-top: $spacing-lg;
+      border-top: 1px solid $color-border;
+      margin-top: $spacing-lg;
+    }
+
+    &__link {
+      padding: $spacing-md;
+      font-size: 1rem;
+    }
+
+    &__actions > :not(&__hamburger) {
       display: none;
+    }
+
+    &__hamburger {
+      display: flex;
+    }
+
+    &__overlay {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: $z-modal - 1;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      animation: overlay-fade 0.25s ease;
     }
   }
 
   @media (max-width: 480px) {
+    &__inner {
+      padding: $spacing-sm $spacing-md;
+    }
+
     &__logo-wordmark {
       display: none;
     }
   }
+}
+
+@keyframes overlay-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

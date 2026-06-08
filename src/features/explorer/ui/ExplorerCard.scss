@@ -8,6 +8,12 @@
   max-width: 520px;
   width: 100%;
 
+  &--dimmed {
+    opacity: 0.5;
+    filter: saturate(0.4);
+    pointer-events: none;
+  }
+
   &__backdrop {
     position: relative;
     height: 200px;

@@ -20,8 +20,13 @@ const achievementSlice = createSlice({
   name: 'achievements',
   initialState,
   reducers: {
-    updateStat(state, action: PayloadAction<Partial<AchievementStats>>) {
-      state.stats = { ...state.stats, ...action.payload };
+    incrementStat(state, action: PayloadAction<Partial<AchievementStats>>) {
+      const entries = Object.entries(action.payload) as [keyof AchievementStats, number][];
+      for (const [key, value] of entries) {
+        if (typeof value === 'number') {
+          state.stats[key] += value;
+        }
+      }
       for (const ach of ACHIEVEMENTS) {
         if (!state.unlocked.includes(ach.id) && ach.condition(state.stats)) {
           state.unlocked.push(ach.id);
@@ -40,7 +45,7 @@ const achievementSlice = createSlice({
   },
 });
 
-export const { updateStat, resetAchievements } = achievementSlice.actions;
+export const { incrementStat, resetAchievements } = achievementSlice.actions;
 export default achievementSlice;
 
 export const selectAchievements = (state: { achievements: AchievementState }): AchievementState =>

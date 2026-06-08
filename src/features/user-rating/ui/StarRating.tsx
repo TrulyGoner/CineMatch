@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/app/store';
 import { setRating, selectUserRating } from '@/features/user-rating/model/store';
+import { incrementStat } from '@/features/achievements';
+import { Icon } from '@/shared/ui/Icon';
 import './StarRating.scss';
 
 interface StarRatingProps {
@@ -18,7 +20,11 @@ export const StarRating = ({ contentKey, interactive = true, size = 'sm' }: Star
   const handleClick = useCallback(
     (value: number) => {
       if (!interactive) return;
-      dispatch(setRating({ key: contentKey, rating: currentRating === value ? 0 : value }));
+      const newRating = currentRating === value ? 0 : value;
+      dispatch(setRating({ key: contentKey, rating: newRating }));
+      if (newRating > 0) {
+        dispatch(incrementStat({ ratingsCount: 1 }));
+      }
     },
     [dispatch, contentKey, currentRating, interactive]
   );
@@ -38,7 +44,7 @@ export const StarRating = ({ contentKey, interactive = true, size = 'sm' }: Star
             aria-checked={filled}
             aria-label={`${star} ${t('rating.stars')}`}
           >
-            ★
+            <Icon name={filled ? 'star-filled' : 'star'} size={size === 'sm' ? 14 : 20} />
           </button>
         );
       })}

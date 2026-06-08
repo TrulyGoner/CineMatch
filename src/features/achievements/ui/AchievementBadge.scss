@@ -1,12 +1,9 @@
 .achievement-badge {
-  @include card-surface;
-  padding: $spacing-md;
-
   &__title {
     font-size: 0.875rem;
     font-weight: 600;
-    margin-bottom: $spacing-md;
     color: $color-text-muted;
+    margin-bottom: $spacing-md;
   }
 
   &__grid {
@@ -19,27 +16,36 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    padding: $spacing-xs $spacing-sm;
-    border-radius: $radius-sm;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid $color-border;
-    opacity: 0.3;
-    filter: grayscale(1);
+    gap: $spacing-xs;
+    padding: $spacing-sm;
+    border-radius: $radius-md;
+    min-width: 64px;
     transition: all $transition-fast;
 
+    &--locked {
+      opacity: 0.25;
+      filter: grayscale(1);
+      pointer-events: none;
+    }
+
     &--unlocked {
-      opacity: 1;
-      filter: none;
-      border-color: $color-border-strong;
+      background: rgba($color-primary, 0.08);
+      border: 1px solid rgba($color-primary, 0.15);
     }
   }
 
-  &__icon { font-size: 1.25rem; }
+  &__icon {
+    font-size: 1.25rem;
+
+    .achievement-badge__item--unlocked & {
+      color: $color-primary;
+    }
+  }
 
   &__label {
     font-size: 0.625rem;
     color: $color-text-muted;
-    white-space: nowrap;
+    text-align: center;
+    line-height: 1.3;
   }
 }

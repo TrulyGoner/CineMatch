@@ -12,6 +12,7 @@ import userRating from '@/features/user-rating/model/store';
 import userFeedback from '@/features/recommendation-feedback/model/store';
 import explorer from '@/features/explorer/model/store';
 import achievement from '@/features/achievements/model/store';
+import collections from '@/features/collections/model/store';
 import toast from '@/shared/ui/Toast/store';
 
 export const store = configureStore({
@@ -28,6 +29,7 @@ export const store = configureStore({
     userFeedback: userFeedback.reducer,
     explorer: explorer.reducer,
     achievements: achievement.reducer,
+    collections: collections.reducer,
     toast: toast.reducer,
   },
 });

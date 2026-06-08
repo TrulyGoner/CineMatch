@@ -4,19 +4,21 @@ import type { Content } from '@/entities/content/model/types';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { buildTmdbImageUrl } from '@/shared/lib/tmdbImages';
 import { formatDate } from '@/shared/lib/formatters';
+import { Icon } from '@/shared/ui/Icon';
 import './ExplorerCard.scss';
 
 interface ExplorerCardProps {
   item: Content;
+  dimmed?: boolean;
 }
 
-export const ExplorerCard = memo(({ item }: ExplorerCardProps) => {
+export const ExplorerCard = memo(({ item, dimmed }: ExplorerCardProps) => {
   const { t } = useTranslation();
   const backdropUrl = buildTmdbImageUrl(item.backdropPath, 'w780');
   const mediaLabel = item.mediaType === 'tv' ? t('detail.series') : t('detail.movie');
 
   return (
-    <div className="explorer-card">
+    <div className={`explorer-card ${dimmed ? 'explorer-card--dimmed' : ''}`}>
       <div className="explorer-card__backdrop">
         {backdropUrl ? (
           <img
@@ -41,7 +43,7 @@ export const ExplorerCard = memo(({ item }: ExplorerCardProps) => {
         <div className="explorer-card__info">
           <div className="explorer-card__labels">
             <span className="explorer-card__badge">{mediaLabel}</span>
-            <span className="explorer-card__rating">★ {item.voteAverage.toFixed(1)}</span>
+            <span className="explorer-card__rating"><Icon name="star-filled" size={12} /> {item.voteAverage.toFixed(1)}</span>
           </div>
           <h2 className="explorer-card__title">{item.title}</h2>
           <p className="explorer-card__meta">

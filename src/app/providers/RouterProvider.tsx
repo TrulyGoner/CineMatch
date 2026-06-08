@@ -7,6 +7,8 @@ import { HomePage } from '@/pages/home/ui/HomePage';
 import { ContentPage } from '@/pages/content/ui/ContentPage';
 import { SettingsPage } from '@/pages/settings/ui/SettingsPage';
 import { SavedPage } from '@/pages/saved/ui/SavedPage';
+import { HistoryPage } from '@/pages/history/ui/HistoryPage';
+import { ProfilePage } from '@/pages/profile/ui/ProfilePage';
 import ExplorerPage from '@/pages/explorer/ui/ExplorerPage';
 
 const DashboardPage = lazy(() => import('@/pages/dashboard/ui/DashboardPage'));
@@ -33,6 +35,8 @@ export const RouterProvider = () => (
             />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/explorer" element={<ExplorerPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

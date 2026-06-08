@@ -158,6 +158,7 @@ export const fetchWatchProviders = async (
   flatrate: WatchProvider[];
   rent: WatchProvider[];
   buy: WatchProvider[];
+  link: string | null;
 }> => {
   assertApiKey();
   const endpoint = `/${mediaType}/${contentId}/watch/providers`;
@@ -182,9 +183,10 @@ export const fetchWatchProviders = async (
       flatrate: region.flatrate ?? [],
       rent: region.rent ?? [],
       buy: region.buy ?? [],
+      link: region.link ?? null,
     };
   } catch {
-    return { flatrate: [], rent: [], buy: [] };
+    return { flatrate: [], rent: [], buy: [], link: null };
   }
 };
 

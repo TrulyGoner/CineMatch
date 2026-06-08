@@ -2,6 +2,13 @@
   @include card-surface;
   padding: $spacing-lg;
 
+  --chart-grid: var(--color-border-strong);
+  --chart-axis: var(--color-text-muted);
+  --chart-tooltip-bg: var(--color-surface-elevated);
+  --chart-tooltip-border: var(--color-border-strong);
+  --chart-line-clicks: #6c8cff;
+  --chart-line-views: #ff6b9d;
+
   &__title {
     font-size: 1rem;
     font-weight: 600;

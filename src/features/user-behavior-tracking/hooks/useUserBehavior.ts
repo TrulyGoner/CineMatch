@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { trackEvent, selectBehaviorEvents } from '../model/store';
 import { createTracker } from '../lib/tracker';
 import { useAppDispatch } from '@/app/store';
+import { incrementStat } from '@/features/achievements';
 import type { UserBehaviorEvent } from '@/entities/analytics/model/types';
 
 export const useUserBehavior = () => {
@@ -12,6 +13,9 @@ export const useUserBehavior = () => {
   const onTrack = useCallback(
     (event: UserBehaviorEvent) => {
       dispatch(trackEvent(event));
+      if (event.type === 'view') {
+        dispatch(incrementStat({ viewsLogged: 1 }));
+      }
     },
     [dispatch]
   );

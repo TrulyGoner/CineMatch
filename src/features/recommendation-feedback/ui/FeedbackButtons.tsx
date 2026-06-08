@@ -8,6 +8,8 @@ import {
   selectIsLiked,
   selectIsDisliked,
 } from '@/features/recommendation-feedback/model/store';
+import { incrementStat } from '@/features/achievements';
+import { Icon } from '@/shared/ui/Icon';
 import './FeedbackButtons.scss';
 
 interface FeedbackButtonsProps {
@@ -25,8 +27,11 @@ export const FeedbackButtons = ({ contentKey, onNotInterested }: FeedbackButtons
     (e: React.MouseEvent) => {
       e.stopPropagation();
       dispatch(toggleLike(contentKey));
+      if (!isLiked) {
+        dispatch(incrementStat({ likesGiven: 1 }));
+      }
     },
-    [dispatch, contentKey]
+    [dispatch, contentKey, isLiked]
   );
 
   const handleDislike = useCallback(
@@ -54,7 +59,7 @@ export const FeedbackButtons = ({ contentKey, onNotInterested }: FeedbackButtons
         onClick={handleLike}
         aria-label={t('feedback.like')}
       >
-        👍
+        <Icon name="thumbs-up" />
       </button>
       <button
         type="button"
@@ -62,7 +67,7 @@ export const FeedbackButtons = ({ contentKey, onNotInterested }: FeedbackButtons
         onClick={handleDislike}
         aria-label={t('feedback.dislike')}
       >
-        👎
+        <Icon name="thumbs-down" />
       </button>
       <button
         type="button"
@@ -70,7 +75,7 @@ export const FeedbackButtons = ({ contentKey, onNotInterested }: FeedbackButtons
         onClick={handleNotInterested}
         aria-label={t('feedback.notInterested')}
       >
-        ✕
+        <Icon name="x" />
       </button>
     </div>
   );

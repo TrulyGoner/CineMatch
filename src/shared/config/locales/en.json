@@ -20,7 +20,10 @@
     "loadMore": "Load more",
     "nothingFound": "Nothing found. Change your search or filter.",
     "errorLoad": "Failed to load content",
-    "retry": "Retry"
+    "retry": "Retry",
+    "click": "click",
+    "clicks": "clicks",
+    "viewed": "viewed"
   },
   "dashboard": {
     "title": "Behavior Dashboard",
@@ -191,6 +194,54 @@
   "trailers": {
     "title": "Trailers & Videos",
     "noVideos": "No videos available"
+  },
+  "sort": {
+    "label": "Sort by",
+    "default": "Default",
+    "rating": "Rating",
+    "releaseDate": "Release Date",
+    "popularity": "Popularity"
+  },
+  "history": {
+    "title": "View History",
+    "description": "All content you've opened recently.",
+    "empty": "You haven't opened any content yet",
+    "clear": "Clear history",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "earlier": "Earlier",
+    "itemsCount": "{{count}} items",
+    "itemsCount_plural": "{{count}} items"
+  },
+  "profile": {
+    "title": "Profile",
+    "stats": "Your Stats",
+    "ratings": "Ratings given",
+    "saved": "Items saved",
+    "views": "Content viewed",
+    "likes": "Likes given",
+    "dislikes": "Dislikes",
+    "feedback": "Feedback given",
+    "genres": "Favorite genres",
+    "noGenres": "Not enough data yet",
+    "recentActivity": "Recent Activity"
+  },
+  "collections": {
+    "title": "Collections",
+    "create": "Create collection",
+    "createTitle": "New Collection",
+    "createHint": "Give your collection a name to organize saved content.",
+    "namePlaceholder": "Collection name",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete collection",
+    "deleteConfirm": "Are you sure you want to delete \"{{name}}\"?",
+    "addItem": "Add to collection",
+    "removeItem": "Remove from collection",
+    "empty": "No collections yet. Create one to organize your saved content.",
+    "emptyCollection": "This collection is empty. Add content from the catalog.",
+    "rename": "Rename",
+    "defaultName": "My Collection"
   },
   "toasts": {
     "saved": "Added to saved",

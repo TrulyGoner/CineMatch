@@ -14,6 +14,12 @@
     line-height: 1.65;
     font-size: 0.9375rem;
   }
+
+  &__toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: $spacing-md;
+  }
 }
 
 @keyframes fade-up {

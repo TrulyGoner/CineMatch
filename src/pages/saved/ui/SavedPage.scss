@@ -1,20 +1,96 @@
 .saved-page {
-  padding-top: $spacing-xl;
+  animation: fade-up 0.5s ease;
 
-  &__hero {
-    margin-bottom: $spacing-2xl;
+  h1 {
+    @include heading-display;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: $spacing-lg;
+  }
 
-    h1 {
-      @include heading-display;
-      font-size: clamp(1.75rem, 3vw, 2.25rem);
+  &__collections-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__collection-chip {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: 0.8125rem;
+    padding: $spacing-xs $spacing-md;
+    border-radius: 99px;
+    border: 1px solid $color-border;
+    background: $color-surface;
+    color: $color-text-muted;
+    cursor: pointer;
+    font-family: $font-body;
+    transition: all $transition-fast;
+
+    &:hover {
+      border-color: $color-primary;
+      color: $color-text;
     }
+
+    &--active {
+      background: rgba($color-primary, 0.12);
+      border-color: $color-primary;
+      color: $color-primary;
+    }
+  }
+
+  &__collection-count {
+    font-size: 0.6875rem;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0 6px;
+    border-radius: 99px;
+  }
+
+  &__collections-section {
+    margin-bottom: $spacing-lg;
+  }
+
+  &__collections-details {
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    overflow: hidden;
+    transition: border-color $transition-fast;
+
+    &:hover {
+      border-color: $color-border-strong;
+    }
+  }
+
+  &__collections-summary {
+    padding: $spacing-sm $spacing-md;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $color-text-muted;
+    cursor: pointer;
+    user-select: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-text;
+    }
+
+    &::marker {
+      color: $color-primary;
+    }
+  }
+
+  &__collection-name {
+    font-size: 0.9375rem;
+    color: $color-text-soft;
+    margin-bottom: $spacing-md;
   }
 
   &__empty {
     color: $color-text-muted;
     text-align: center;
     padding: $spacing-2xl;
-    @include card-surface;
+    @include glass-surface;
     border-radius: $radius-lg;
   }
 }

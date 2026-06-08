@@ -35,6 +35,12 @@
   animation: fade-up 0.5s ease;
 }
 
+@media (max-width: 480px) {
+  .app-main {
+    padding: $spacing-md $spacing-sm $spacing-xl;
+  }
+}
+
 // Общие секции
 .section-title {
   @include heading-display;
