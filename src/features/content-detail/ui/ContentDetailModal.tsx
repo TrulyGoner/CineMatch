@@ -8,14 +8,18 @@ import { WhyRecommended } from '@/features/recommendation-engine/ui/WhyRecommend
 import { SaveButton } from '@/features/saved-content';
 import { StarRating } from '@/features/user-rating';
 import { FeedbackButtons } from '@/features/recommendation-feedback';
+import { CollectionManager } from '@/features/collections';
 import { ContentPoster } from '@/shared/ui/ContentPoster';
 import { buildTmdbImageUrl } from '@/shared/lib/tmdbImages';
 import { formatDate, formatDuration } from '@/shared/lib/formatters';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
+import { Button } from '@/shared/ui/Button';
 import { useContentDetail } from '../hooks/useContentDetail';
 import { fetchSimilar, fetchWatchProviders } from '@/features/content-discovery/api/contentApi';
+import { fetchVideos } from '@/features/content-discovery/api/videos';
 import type { WatchProvider } from '@/features/content-discovery/api/contentApi';
+import type { TmdbVideo } from '@/features/content-discovery/api/videos';
 import type { Content } from '@/entities/content/model/types';
 import { openDetail } from '@/features/content-detail/model/store';
 import './ContentDetailModal.scss';
@@ -41,6 +45,8 @@ export const ContentDetailModal = () => {
   const events = useAppSelector(selectBehaviorEvents);
   const { t } = useTranslation();
   const [similar, setSimilar] = useState<Content[]>([]);
+  const [videos, setVideos] = useState<TmdbVideo[]>([]);
+  const [showCollections, setShowCollections] = useState(false);
   const [providers, setProviders] = useState<{
     flatrate: WatchProvider[];
     rent: WatchProvider[];
@@ -74,6 +80,15 @@ export const ContentDetailModal = () => {
       .then((res) => { if (!cancelled) setProviders(res); })
       .catch(() => { if (!cancelled) setProviders({ flatrate: [], rent: [], buy: [] }); });
     return () => { cancelled = true; setProviders({ flatrate: [], rent: [], buy: [] }); };
+  }, [item, isOpen]);
+
+  useEffect(() => {
+    if (!item || !isOpen) return;
+    let cancelled = false;
+    fetchVideos(item.id, item.mediaType)
+      .then((res) => { if (!cancelled) setVideos(res); })
+      .catch(() => { if (!cancelled) setVideos([]); });
+    return () => { cancelled = true; setVideos([]); };
   }, [item, isOpen]);
 
   const handleSimilarOpen = useCallback((simItem: Content) => {
@@ -130,7 +145,17 @@ export const ContentDetailModal = () => {
               <SaveButton item={item} />
               <StarRating contentKey={contentKey} size="md" interactive />
               <FeedbackButtons contentKey={contentKey} />
+              <Button variant="ghost" size="sm" onClick={() => setShowCollections((p) => !p)}>
+                <span className="content-detail-modal__collections-icon">+</span>
+                {t('collections.title')}
+              </Button>
             </div>
+
+            {showCollections && item && (
+              <div className="content-detail-modal__collections-panel">
+                <CollectionManager itemKey={contentKey} />
+              </div>
+            )}
 
             <p className="content-detail-modal__meta">
               {formatDate(item.releaseDate)}
@@ -172,6 +197,27 @@ export const ContentDetailModal = () => {
                       {formatDuration(metrics.viewDuration)} {t('detail.views')}
                     </span>
                   )}
+                </div>
+              </div>
+            )}
+
+            {videos.length > 0 && (
+              <div className="content-detail-modal__trailers">
+                <h4 className="content-detail-modal__trailers-title">{t('trailers.title')}</h4>
+                <div className="content-detail-modal__trailers-row">
+                  {videos.slice(0, 3).map((v) => (
+                    <div key={v.id} className="content-detail-modal__trailer-card">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${v.key}`}
+                        title={v.name}
+                        className="content-detail-modal__trailer-iframe"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                      <span className="content-detail-modal__trailer-name">{v.name}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

@@ -1,6 +1,8 @@
 import { createSlice, createSelector, type PayloadAction } from '@reduxjs/toolkit';
 import type { Content } from '@/entities/content/model/types';
 
+type SortField = 'default' | 'rating' | 'releaseDate' | 'popularity';
+
 interface ContentState {
   items: Content[];
   page: number;
@@ -9,6 +11,7 @@ interface ContentState {
   error: string | null;
   searchQuery: string;
   selectedGenre: string | null;
+  sortBy: SortField;
 }
 
 const initialState: ContentState = {
@@ -19,6 +22,7 @@ const initialState: ContentState = {
   error: null,
   searchQuery: '',
   selectedGenre: null,
+  sortBy: 'default',
 };
 
 const contentSlice = createSlice({
@@ -61,6 +65,9 @@ const contentSlice = createSlice({
     setSelectedGenre(state, action: PayloadAction<string | null>) {
       state.selectedGenre = action.payload;
     },
+    setSortBy(state, action: PayloadAction<SortField>) {
+      state.sortBy = action.payload;
+    },
   },
 });
 
@@ -71,6 +78,7 @@ export const {
   resetContent,
   setSearchQuery,
   setSelectedGenre,
+  setSortBy,
 } = contentSlice.actions;
 export default contentSlice;
 
@@ -82,10 +90,10 @@ const selectContentState = (state: { content: ContentState }): ContentState => s
 export const selectFilteredContent = createSelector(
   selectContentState,
   (content) => {
-    const { items, searchQuery, selectedGenre } = content;
+    const { items, searchQuery, selectedGenre, sortBy } = content;
     const query = searchQuery.trim().toLowerCase();
 
-    return items.filter((item) => {
+    let filtered = items.filter((item) => {
       const matchesGenre =
         !selectedGenre || item.genres.some((g) => g.toLowerCase() === selectedGenre.toLowerCase());
 
@@ -96,6 +104,16 @@ export const selectFilteredContent = createSelector(
 
       return matchesGenre && matchesSearch;
     });
+
+    if (sortBy === 'rating') {
+      filtered = [...filtered].sort((a, b) => b.voteAverage - a.voteAverage);
+    } else if (sortBy === 'releaseDate') {
+      filtered = [...filtered].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
+    } else if (sortBy === 'popularity') {
+      filtered = [...filtered].sort((a, b) => b.popularity - a.popularity);
+    }
+
+    return filtered;
   }
 );
 
@@ -116,3 +134,6 @@ export const selectSearchQuery = (state: { content: ContentState }): string =>
 
 export const selectSelectedGenre = (state: { content: ContentState }): string | null =>
   state.content.selectedGenre;
+
+export const selectSortBy = (state: { content: ContentState }): SortField =>
+  state.content.sortBy;

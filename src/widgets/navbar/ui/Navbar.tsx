@@ -17,7 +17,9 @@ export const Navbar = () => {
     { to: '/explorer', label: t('navbar.explorer') },
     { to: '/content', label: t('navbar.catalog') },
     { to: '/saved', label: t('saved.title') },
+    { to: '/history', label: t('history.title') },
     { to: '/dashboard', label: t('navbar.dashboard') },
+    { to: '/profile', label: t('profile.title') },
     { to: '/settings', label: t('navbar.settings') },
   ];
 

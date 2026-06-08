@@ -1,0 +1,45 @@
+.history-page {
+  animation: fade-up 0.5s ease;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-md;
+
+    h1 {
+      @include heading-display;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      margin-bottom: 0;
+    }
+  }
+
+  &__empty {
+    color: $color-text-muted;
+    text-align: center;
+    padding: $spacing-2xl 0;
+  }
+
+  &__groups {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+  }
+
+  &__group-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-text-soft;
+    margin-bottom: $spacing-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $color-border;
+    }
+  }
+}
