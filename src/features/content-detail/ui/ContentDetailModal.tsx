@@ -15,6 +15,7 @@ import { formatDate, formatDuration } from '@/shared/lib/formatters';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
 import { Button } from '@/shared/ui/Button';
+import { env } from '@/shared/config/env';
 import { useContentDetail } from '../hooks/useContentDetail';
 import { fetchSimilar, fetchWatchProviders } from '@/features/content-discovery/api/contentApi';
 import { fetchVideos } from '@/features/content-discovery/api/videos';
@@ -39,12 +40,23 @@ const addRecentView = (item: Content): void => {
   }
 };
 
+const proxifyTmdbUrl = (url: string): string =>
+  url.startsWith('https://www.themoviedb.org')
+    ? url.replace('https://www.themoviedb.org', env.tmdbWwwBase)
+    : url;
+
 const renderProviderGroup = (
   providers: WatchProvider[],
   watchLink: string | null,
-  label: string
+  label: string,
+  contentId?: number,
+  mediaType?: string
 ): React.ReactNode => {
   if (providers.length === 0) return null;
+  const fallbackHref = contentId && mediaType
+    ? `${env.tmdbWwwBase}/${mediaType}/${contentId}/watch`
+    : `${env.tmdbWwwBase}/watch`;
+  const baseHref = watchLink ? proxifyTmdbUrl(watchLink) : fallbackHref;
   return (
     <div className="content-detail-modal__provider-group">
       <span className="content-detail-modal__provider-label">{label}</span>
@@ -52,16 +64,13 @@ const renderProviderGroup = (
         {providers.map((p) => {
           const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
           if (!imgUrl) return null;
-          const href = watchLink
-            ? `${watchLink}${watchLink.includes('?') ? '&' : '?'}provider_id=${p.provider_id}`
-            : `https://www.themoviedb.org/${p.provider_id > 0 ? 'watch' : ''}`;
           return (
             <a
               key={p.provider_id}
-              href={href}
+              href={baseHref}
               target="_blank"
               rel="noopener noreferrer"
-              title={p.provider_name}
+              title={`${p.provider_name} — ${label}`}
               className="content-detail-modal__provider-link"
             >
               <img
@@ -309,9 +318,9 @@ export const ContentDetailModal = () => {
             {hasProviders && (
               <div className="content-detail-modal__providers">
                 <h4 className="content-detail-modal__providers-title">{t('detail.whereToWatch')}</h4>
-                {renderProviderGroup(providers.flatrate, providers.link, t('detail.streaming'))}
-                {renderProviderGroup(providers.rent, providers.link, t('detail.rent'))}
-                {renderProviderGroup(providers.buy, providers.link, t('detail.buy'))}
+                {renderProviderGroup(providers.flatrate, providers.link, t('detail.streaming'), item.id, item.mediaType)}
+                {renderProviderGroup(providers.rent, providers.link, t('detail.rent'), item.id, item.mediaType)}
+                {renderProviderGroup(providers.buy, providers.link, t('detail.buy'), item.id, item.mediaType)}
               </div>
             )}
 
