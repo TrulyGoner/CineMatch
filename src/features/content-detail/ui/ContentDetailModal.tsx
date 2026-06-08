@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/shared/config/i18n';
 import { useAppDispatch, useAppSelector } from '@/app/store';
@@ -39,6 +39,45 @@ const addRecentView = (item: Content): void => {
   }
 };
 
+const renderProviderGroup = (
+  providers: WatchProvider[],
+  watchLink: string | null,
+  label: string
+): React.ReactNode => {
+  if (providers.length === 0) return null;
+  return (
+    <div className="content-detail-modal__provider-group">
+      <span className="content-detail-modal__provider-label">{label}</span>
+      <div className="content-detail-modal__provider-icons">
+        {providers.map((p) => {
+          const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
+          if (!imgUrl) return null;
+          const href = watchLink
+            ? `${watchLink}${watchLink.includes('?') ? '&' : '?'}provider_id=${p.provider_id}`
+            : `https://www.themoviedb.org/${p.provider_id > 0 ? 'watch' : ''}`;
+          return (
+            <a
+              key={p.provider_id}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={p.provider_name}
+              className="content-detail-modal__provider-link"
+            >
+              <img
+                src={imgUrl}
+                alt={p.provider_name}
+                className="content-detail-modal__provider-icon"
+                loading="lazy"
+              />
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 export const ContentDetailModal = () => {
   const { item, reasons, isOpen, close } = useContentDetail();
   const dispatch = useAppDispatch();
@@ -47,11 +86,14 @@ export const ContentDetailModal = () => {
   const [similar, setSimilar] = useState<Content[]>([]);
   const [videos, setVideos] = useState<TmdbVideo[]>([]);
   const [showCollections, setShowCollections] = useState(false);
+  const [fullscreenVideo, setFullscreenVideo] = useState<TmdbVideo | null>(null);
+  const fullscreenRef = useRef<HTMLDivElement>(null);
   const [providers, setProviders] = useState<{
     flatrate: WatchProvider[];
     rent: WatchProvider[];
     buy: WatchProvider[];
-  }>({ flatrate: [], rent: [], buy: [] });
+    link: string | null;
+  }>({ flatrate: [], rent: [], buy: [], link: null });
 
   const metrics = useMemo(
     () => (item ? computeContentMetrics(item.id, events) : null),
@@ -78,8 +120,8 @@ export const ContentDetailModal = () => {
     let cancelled = false;
     fetchWatchProviders(item.id, item.mediaType)
       .then((res) => { if (!cancelled) setProviders(res); })
-      .catch(() => { if (!cancelled) setProviders({ flatrate: [], rent: [], buy: [] }); });
-    return () => { cancelled = true; setProviders({ flatrate: [], rent: [], buy: [] }); };
+      .catch(() => { if (!cancelled) setProviders({ flatrate: [], rent: [], buy: [], link: null }); });
+    return () => { cancelled = true; setProviders({ flatrate: [], rent: [], buy: [], link: null }); };
   }, [item, isOpen]);
 
   useEffect(() => {
@@ -207,14 +249,26 @@ export const ContentDetailModal = () => {
                 <div className="content-detail-modal__trailers-row">
                   {videos.slice(0, 3).map((v) => (
                     <div key={v.id} className="content-detail-modal__trailer-card">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${v.key}`}
-                        title={v.name}
-                        className="content-detail-modal__trailer-iframe"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        loading="lazy"
-                      />
+                      <div className="content-detail-modal__trailer-media">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${v.key}`}
+                          title={v.name}
+                          className="content-detail-modal__trailer-iframe"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          loading="lazy"
+                        />
+                        <button
+                          type="button"
+                          className="content-detail-modal__trailer-fullscreen"
+                          onClick={() => setFullscreenVideo(v)}
+                          aria-label="Fullscreen"
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3" /><path d="M21 8V5a2 2 0 0 0-2-2h-3" /><path d="M16 21h3a2 2 0 0 0 2-2v-3" /><path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                          </svg>
+                        </button>
+                      </div>
                       <span className="content-detail-modal__trailer-name">{v.name}</span>
                     </div>
                   ))}
@@ -222,69 +276,42 @@ export const ContentDetailModal = () => {
               </div>
             )}
 
+            {fullscreenVideo && (
+              <div
+                className="content-detail-modal__fullscreen"
+                ref={fullscreenRef}
+                onClick={(e) => {
+                  if (e.target === fullscreenRef.current) setFullscreenVideo(null);
+                }}
+                onKeyDown={(e) => { if (e.key === 'Escape') setFullscreenVideo(null); }}
+                role="presentation"
+              >
+                <button
+                  type="button"
+                  className="content-detail-modal__fullscreen-close"
+                  onClick={() => setFullscreenVideo(null)}
+                  aria-label="Close"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6L6 18" /><path d="M6 6l12 12" />
+                  </svg>
+                </button>
+                <iframe
+                  src={`https://www.youtube.com/embed/${fullscreenVideo.key}?autoplay=1`}
+                  title={fullscreenVideo.name}
+                  className="content-detail-modal__fullscreen-video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            )}
+
             {hasProviders && (
               <div className="content-detail-modal__providers">
                 <h4 className="content-detail-modal__providers-title">{t('detail.whereToWatch')}</h4>
-                {providers.flatrate.length > 0 && (
-                  <div className="content-detail-modal__provider-group">
-                    <span className="content-detail-modal__provider-label">{t('detail.streaming')}</span>
-                    <div className="content-detail-modal__provider-icons">
-                      {providers.flatrate.map((p) => {
-                        const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
-                        return imgUrl ? (
-                          <img
-                            key={p.provider_id}
-                            src={imgUrl}
-                            alt={p.provider_name}
-                            title={p.provider_name}
-                            className="content-detail-modal__provider-icon"
-                            loading="lazy"
-                          />
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-                )}
-                {providers.rent.length > 0 && (
-                  <div className="content-detail-modal__provider-group">
-                    <span className="content-detail-modal__provider-label">{t('detail.rent')}</span>
-                    <div className="content-detail-modal__provider-icons">
-                      {providers.rent.map((p) => {
-                        const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
-                        return imgUrl ? (
-                          <img
-                            key={p.provider_id}
-                            src={imgUrl}
-                            alt={p.provider_name}
-                            title={p.provider_name}
-                            className="content-detail-modal__provider-icon"
-                            loading="lazy"
-                          />
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-                )}
-                {providers.buy.length > 0 && (
-                  <div className="content-detail-modal__provider-group">
-                    <span className="content-detail-modal__provider-label">{t('detail.buy')}</span>
-                    <div className="content-detail-modal__provider-icons">
-                      {providers.buy.map((p) => {
-                        const imgUrl = buildTmdbImageUrl(p.logo_path, 'w92');
-                        return imgUrl ? (
-                          <img
-                            key={p.provider_id}
-                            src={imgUrl}
-                            alt={p.provider_name}
-                            title={p.provider_name}
-                            className="content-detail-modal__provider-icon"
-                            loading="lazy"
-                          />
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-                )}
+                {renderProviderGroup(providers.flatrate, providers.link, t('detail.streaming'))}
+                {renderProviderGroup(providers.rent, providers.link, t('detail.rent'))}
+                {renderProviderGroup(providers.buy, providers.link, t('detail.buy'))}
               </div>
             )}
 
