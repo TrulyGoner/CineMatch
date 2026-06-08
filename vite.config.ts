@@ -20,14 +20,12 @@ export default defineConfig({
     proxy: {
       '/tmdb-api': createTmdbProxy('https://api.themoviedb.org', '/tmdb-api'),
       '/tmdb-img': createTmdbProxy('https://image.tmdb.org', '/tmdb-img'),
-      '/tmdb-www': createTmdbProxy('https://www.themoviedb.org', '/tmdb-www'),
     },
   },
   preview: {
     proxy: {
       '/tmdb-api': createTmdbProxy('https://api.themoviedb.org', '/tmdb-api'),
       '/tmdb-img': createTmdbProxy('https://image.tmdb.org', '/tmdb-img'),
-      '/tmdb-www': createTmdbProxy('https://www.themoviedb.org', '/tmdb-www'),
     },
   },
   css: {
